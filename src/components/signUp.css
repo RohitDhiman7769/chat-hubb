@@ -1,0 +1,25 @@
+.title{
+    padding-top: 50px;
+}
+
+.main{
+
+}
+
+.form{
+    padding-top: 10px;
+
+}
+
+.emailInput{
+    width: 300px;
+    height: 39px;
+    border-radius: 6px;
+}
+
+.password{
+    width: 300px;
+    height: 39px;
+    border-radius: 6px;
+    /* padding-top: 20px; */
+}

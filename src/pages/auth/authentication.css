@@ -1,0 +1,37 @@
+.container{
+height: 100%;
+width: 100%;
+}
+
+.main{
+}
+.auth-nav{
+    display: flex;
+    background-color: #082238;
+    height: 47px;
+
+}
+
+.auth-main{
+    background-color: white;
+    width: 500px;
+    border: 2px solid black;
+    height: 450px;
+
+}
+
+
+.nav-box{
+}
+
+.navBtn{
+    width: 165px;
+    border: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ border: "1px solid black";
+ cursor: "pointer" 
+}
+
