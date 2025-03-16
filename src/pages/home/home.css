@@ -1,38 +1,47 @@
-.container{
+.container {
     height: 100%;
     width: 100%;
-    }
-    
-    .main{
-    }
-    .auth-nav{
-        display: flex;
-        background-color: #082238;
-        height: 47px;
-    
-    }
-    
+}
+
+.main {}
+
+.auth-nav {
+    display: flex;
+    background-color: #082238bd;
+    height: 60px;
+    margin-top: 12px;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.auth-nav .navBtn {
+    padding: 9px;
+    margin: 0 6px;
+    border-radius: 10px;
+    border-color: #ffffff82;
+}
+
+/*     
     .auth-main{
         background-color: white;
         width: 500px;
         border: 2px solid black;
         height: 450px;
     
-    }
-    
-    
-    .nav-box{
-    }
-    
-    .navBtn{
-        width: 165px;
-        border: 1px solid black;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-     border: "1px solid black";
-     cursor: "pointer" 
-    }
-    
-    
+    } */
+
+
+.nav-box {}
+
+.navBtn {
+    width: 165px;
+    border: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: "1px solid black";
+    cursor: "pointer"
+}
