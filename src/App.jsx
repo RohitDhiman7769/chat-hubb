@@ -20,7 +20,6 @@ function App() {
    <Route path='/sign-up' Component={Authenctication} />
    <Route path='/forget-password' Component={Authenctication} />
    </Routes>
-
     </>
   )
 }
