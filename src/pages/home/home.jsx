@@ -17,6 +17,7 @@ function Home() {
      */
     useEffect(() => {
         setShowComp(1);
+        console.log('working')
     }, []);
 
 
