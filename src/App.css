@@ -43,3 +43,67 @@
 .read-the-docs {
   color: #888;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+
+.auth-nav {
+  display: flex;
+  background-color: #082238bd;
+  height: 60px;
+  margin-top: 12px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+
+}
+.auth_form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: 80px auto;
+  border: 1px solid #0000003d;
+  padding: 30px;
+  border-radius: 22px;
+}
+.auth_form .title {
+  padding-top: 0;
+}
+
+.auth_form .title h1 {
+  font-size: 31px;
+  font-weight: 700;
+  color: #475b6b;
+}
+.auth_form form, .auth_form .form {
+  display: block;
+  width: 100%;
+}
+.auth_form form input {
+  width: 100%;
+  height: 50px;
+  padding: 16px;
+  border: 1px solid #00000029;
+  color: #475b6b !important;
+}
+.auth_form form button[type="submit"] {
+  width: 100%;
+  background-color: #475b6bc9;
+  border-radius: 9px;
+  height: 51px;
+  color: #fff;
+  transition: all .5s ease;
+  margin-top: 20px;
+
+}
+.auth_form form button[type="submit"]:hover,.auth_form form button[type="submit"]:focus-within {
+  background-color: #26313b;
+ 
+}

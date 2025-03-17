@@ -22,7 +22,7 @@ function SignUp() {
     });
 
     return (
-        <div className="main">
+        <div className="main auth_form">
             <div className="title">
                 <h1>Sign-Up</h1>
             </div>

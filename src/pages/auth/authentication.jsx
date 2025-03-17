@@ -55,12 +55,26 @@ function Authentication() {
                         </div>
                     </div>
                     <div className="auth-main">
-
-                        <Routes>
+                    {showComp ==1 && 
+                    <>
+                    <Login/>
+                    </>
+                    }
+                     {showComp ==2 && 
+                    <>
+                    <SignUp/>
+                    </>
+                    }
+                     {showComp ==3 && 
+                    <>
+                    <ForgetPassword/>
+                    </>
+                    }
+                        {/* <Routes>
                             <Route  path='/log-in' Component={Login} />
                             <Route  path='/sign-up' Component={SignUp} />
                             <Route  path='/forget-password' Component={ForgetPassword} />
-                        </Routes>
+                        </Routes> */}
                     </div>
                 </div>
             </div>

@@ -20,7 +20,7 @@ function ForgetPassword() {
     });
 
     return (
-        <div className="main">
+        <div className="main auth_form">
             <div className="title">
             <h1>Forget Password</h1>
             </div>
