@@ -3,7 +3,6 @@ import { ReportUserId, fetchParticularUserProfile } from '../utils/chat-funtion'
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { db } from "../firebase-config";
 import { addImageInS3Bucket } from "../utils/chat-funtion";
-// export default function Chat({  appendUserId, conversationId, conversationDocRef,ref }) {
 const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, ref) => {
     const [currentUserId, setCurrentUserId] = useState(localStorage.getItem('user_id'))
     const [newMessage, setNewMessage] = useState("")
@@ -35,14 +34,11 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, r
      * sent message
      */
     const sendMessage = async () => {
-
-        // const conversationId = [currentChatUserData._id, localStorage.getItem('user_id')].sort().join('_')
-
         console.log(conversationId)
         console.log(conversationDocRef)
         const conversationData = {
             text: newMessage,
-            type : 'text',
+            type: 'text',
             name: localStorage.getItem('email').split('@')[0],
             createdAt: serverTimestamp(),
             user: localStorage.getItem('user_id'),
@@ -105,17 +101,17 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, r
     const getImages = async (e) => {
         for (let val of e.target.files) {
             console.log(val)
-            const image = await addImageInS3Bucket(selecetedRoomImage)
+            const image = await addImageInS3Bucket(val)
             const conversationData = {
                 text: image,
-                type :'file',
+                type: 'file',
                 name: localStorage.getItem('email').split('@')[0],
                 createdAt: serverTimestamp(),
                 user: localStorage.getItem('user_id'),
                 image: localStorage.getItem('profile_img'),
                 conversationId: conversationId
             }
-
+            console.log(conversationData)
             const messagesCollectionRef = collection(conversationDocRef, conversationId);
             await addDoc(messagesCollectionRef, conversationData)
         }
@@ -154,13 +150,24 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, r
 
                                     </ul>
                                     <div className="chat_inner d-flex justify-content-start align-items-center">
-                                        <div className="messsage">
-                                            {mes.text}
-                                        </div>
+                                        {mes.type == 'file' ?
+                                            <>
+                                                <div className="image_box">
+                                                    <img src={mes.text} style={{height:'150px', width:'150px', border:'1px solid black', borderRadius:'1px !important'}} alt="Avatar" />
+                                                </div>
+                                            </>
+                                            :
+                                            <>
+                                                <div className="messsage">
+                                                    {mes.text}
+                                                </div>
+                                            </>
+                                        }
+
                                         <span className="time">{formatTimestamp(mes.createdAt)}</span>
                                     </div>
                                     <div className="image_box">
-                                        <img src={mes.image} alt="Avatar" />
+                                        <img style={{border:'1px solid black', borderRadius:'100px'}} src={mes.image} alt="Avatar" />
                                     </div>
                                 </div>
 
@@ -168,7 +175,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, r
 
                                 <div key={mes.id} className="left_chat chat_main d-flex justify-content-start align-items-end">
                                     <div className="image_box" style={{ cursor: 'pointer' }} onClick={() => getUserId(mes)}>
-                                        <img src={mes.image} alt="Avatar" />
+                                        <img style={{border:'1px solid black', borderRadius:'100px'}} src={mes.image} alt="Avatar" />
                                     </div>
                                     <div className="chat_inner d-flex justify-content-start align-items-center">
                                         <div className="messsage">
@@ -176,7 +183,19 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef }, r
                                                 {mes.name}
                                             </p>
 
-                                            {mes.text}
+                                            {mes.type == 'file' ?
+                                            <>
+                                                <div className="image_box">
+                                                    <img src={mes.text} style={{height:'150px', width:'150px', border:'1px solid black', borderRadius:'1px'}} alt="Avatar" />
+                                                </div>
+                                            </>
+                                            :
+                                            <>
+                                                <div className="messsage">
+                                                    {mes.text}
+                                                </div>
+                                            </>
+                                        }
                                             <br />
                                             <span className="time">{formatTimestamp(mes.createdAt, 2)}</span>
 
