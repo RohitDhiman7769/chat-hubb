@@ -9,10 +9,6 @@ const validationSchema = Yup.object().shape({
 });
 
 function ForgetPassword() {
-    // const handleChildData = (event) => {
-    //     console.log(event);
-    // };
-
     const formik = useFormik({
         initialValues: { email: ""},
         validationSchema: validationSchema,

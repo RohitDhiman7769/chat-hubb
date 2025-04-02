@@ -10,9 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.8.3",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.7",
+    "firebase": "^11.4.0",
     "formik": "^2.4.6",
     "react": "^19.0.0",
+    "react-aws-s3-typescript": "^2.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
     "yup": "^1.6.1"

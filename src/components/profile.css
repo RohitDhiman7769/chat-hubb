@@ -1,0 +1,10 @@
+.profile-img{
+    height: 100px;
+    width: 100px;
+}
+.person_status{
+    display: flex
+;
+    justify-content: center;
+    align-items: center;
+}
