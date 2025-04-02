@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = " http://127.0.0.1:5000/api/users/"; // Replace with your API URL
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL; // Replace with your API URL
 
 // Create an Axios instance for default settings
 const apiClient = axios.create({
