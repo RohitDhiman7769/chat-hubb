@@ -4,6 +4,8 @@ import './profile.css'
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import UserProfileView from "./userProfileView";
+import.meta.env.VITE_API_KEY
+
 function Profile() { 
     const navigate = useNavigate();
     const [userData, setUserData] = useState()
@@ -78,6 +80,7 @@ function Profile() {
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
     
                                                 <div className="person_status">
+                                                    <h1>{import.meta.env.VITE_AWS_SECRET_KEY}</h1>
                                                     <h2 style={{ fontWeight: '700' }} className="m-o person_name_head">
                                                         Profile
                                                     </h2>
