@@ -80,6 +80,7 @@ function Profile() {
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
     
                                                 <div className="person_status">
+                                                    <h1>{import.meta.env.VITE_BACKEND_URL}</h1>
                                                     <h2 style={{ fontWeight: '700' }} className="m-o person_name_head">
                                                         Profile
                                                     </h2>
