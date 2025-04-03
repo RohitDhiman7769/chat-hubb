@@ -14,20 +14,20 @@ const validationSchema = Yup.object().shape({
 
 function Login() {
     const navigate = useNavigate();
+    const [showSpinner, setShowSpinner] = useState(false)
 
     const formik = useFormik({
         initialValues: { email: "", password: "" },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
+            setShowSpinner(true)
             const response = await apiService.post("/log-in", {
                 password: values.password,
                 email: values.email,
             });
-            console.log(response)
-
             if (response.data.code == 200) {
+                setShowSpinner(false)
                 alert(response.data.message)
-                console.log(response.data.user_data.user_id)
                 localStorage.setItem('auth_token', response.data.access_token)
                 localStorage.setItem('user_id', response.data.user_data._id)
                 localStorage.setItem('email', response.data.user_data.email)
@@ -73,7 +73,12 @@ function Login() {
                     <p style={{ color: "red" }}>{formik.errors.password}</p>
 
                     <div>
-                        <button type="submit">Submit</button>
+                        <button type="submit">{showSpinner ?
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div> : <>Submit</>}</button>
                     </div>
 
                     <GoogleAuth></GoogleAuth>

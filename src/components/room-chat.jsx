@@ -25,7 +25,6 @@ function RoomChat() {
     const [roomName, setRoomName] = useState()
     const [showRoomCreatInput, setShowRoomCreatInput] = useState(false)
     const [roomMember, setRoomMember] = useState([])
-    // const [updateRoomName, setUpdatedRoomName] = useState(null)
     const [showChatComp, setShowChatComp] = useState(1)
     const [roomList, setRoomList] = useState([])
     const [selecetedRoomImage, setSelecetedRoomImage] = useState(null)
@@ -33,6 +32,7 @@ function RoomChat() {
     const [listOfUsers, setListOfUsers] = useState([])
     const [currentOpenedRoomDetails, setCurrentOpenedRoomDetails] = useState()
     const [conversationId, setConversationId] = useState()
+    const [showSpinner, setShowSpinner] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,6 +70,7 @@ function RoomChat() {
     const fetchUserFriends = async () => {
         try {
             const getRoomList = await apiService.get(`/room-list?userId=${currentUserId}`);
+            setShowSpinner(false)
             setRoomList(getRoomList.data.data)
         } catch (err) {
             console.log(err)
@@ -111,60 +112,7 @@ function RoomChat() {
     }
 
 
-
-    // /**
-    //  * 
-    //  * @param {*} userId get member id to remove into array
-    //  */
-    // const removeMeberFromRoom = (userId) => {
-    //     if (roomMember.includes(userId)) {
-    //         setRoomMember(roomMember.filter((id) => id !== userId));
-    //     } else {
-    //         setRoomMember([...roomMember, userId]);
-    //     }
-    // };
-
-
-    //     /**
-    //  * 
-    //  * @param {*} value get input text to search user 
-    //  */
-    //     const searchUser = async (value) => {
-    //         console.log("Received from child:", value);
-    //         const response = await apiService.get(`/search-user?chr=${value}`);
-    //         setListOfUsers(response.data.data)
-
-    //     };
-
-
-    // /**
-    //    * fetch all users from backend
-    //    */
-    // const fetchAllUser = async () => {
-
-    //     const response = await apiService.get(`/fetch-all-users?userId${user}`);
-    //     setListOfUsers(response.data.data)
-    //     inputRef.current.value = ''
-    // }
-
-
-    /**
-     * Hit request to send array of id into backend
-     */
-    // const addFriend = async () => {
-    //     const response = await apiService.post(`/add-friend`, {
-    //         user_id: localStorage.getItem('user_id'),
-    //         arrayOfAddedUsersId: selectedUserForFriend
-    //     });
-    //     if (response.data?.code == 200) {
-    //         modalCloseBtn.current.click()
-    //         localStorage.setItem('initial_login', 2)
-    //     }
-    // };
-
-
     const getUserList = async () => {
-
         console.log(roomType)
         if (roomType == 2) {
             try {
@@ -184,7 +132,6 @@ function RoomChat() {
                 console.log(err)
             }
         }
-
         modalOpenBtn.current.click()
     }
 
@@ -221,21 +168,33 @@ function RoomChat() {
                                             </div>
                                             <h1>{showRoomCreatInput}</h1>
 
-                                            {roomList.length > 0 && showRoomCreatInput == false ?
-                                                (<div>
-                                                    <div className="chat_person_head  ">
-                                                        {roomList.map((room) => (
-                                                            <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
-                                                                <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
-                                                                    <div className="image_box">
-                                                                        <img src={room.image} alt="" />
-                                                                    </div>
-                                                                    <h1 style={{ marginLeft: '20px' }}>{room.room_name}</h1>
+                                            {showRoomCreatInput == false ?
+                                                <>
+                                                    {showSpinner ?
+                                                        <>
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="spinner-border" role="status">
+                                                                    <span class="visually-hidden">Loading...</span>
                                                                 </div>
                                                             </div>
-                                                        ))}
-                                                    </div></div>
-                                                )
+
+                                                        </>
+                                                        :
+                                                        <div className="chat_person_head  ">
+                                                            {roomList.map((room) => (
+                                                                <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
+                                                                    <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
+                                                                        <div className="image_box">
+                                                                            <img src={room.image} alt="" />
+                                                                        </div>
+                                                                        <h1 style={{ marginLeft: '20px' }}>{room.room_name}</h1>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    }
+                                                </>
+
 
                                                 :
 
@@ -264,7 +223,7 @@ function RoomChat() {
                                                         </div>
                                                         :
                                                         <div style={{ display: 'flex', justifyContent: 'center' }} >
-                                                            <h2>No room exist</h2>
+                                                            <h2>No room exisst</h2>
                                                         </div>
                                                     }
                                                 </div>)
@@ -299,11 +258,11 @@ function RoomChat() {
                                         <div className="chat_person_head d-flex justify-content-between align-items-center">
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
                                                 <div onClick={openGroupInfo} className="image_box">
-                                                    <img src={currentOpenedRoomDetails.image} alt="" />
+                                                    <img src={currentOpenedRoomDetails?.image} alt="" />
                                                 </div>
                                                 <div onClick={openGroupInfo} className="person_status">
                                                     <h4 className="m-o person_name_head">
-                                                        {currentOpenedRoomDetails.room_name}
+                                                        {currentOpenedRoomDetails?.room_name}
                                                     </h4>
                                                 </div>
                                             </div>
@@ -363,7 +322,7 @@ function RoomChat() {
                                                 <div className="person_status">
                                                     <img style={{ height: '25px' }} src={myImage} alt="" />
 
-                                                    <h2 style={{ fontWeight: '700', marginLeft:'15px', marginTop : '7px' }} className="m-o person_name_head">
+                                                    <h2 style={{ fontWeight: '700', marginLeft: '15px', marginTop: '7px' }} className="m-o person_name_head">
                                                         Room Info
                                                     </h2>
                                                     <br />
@@ -373,7 +332,7 @@ function RoomChat() {
                                                 <div className="dropdown setting_drop three_dot seeting_btn_desktop">
                                                     <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
                                                         aria-expanded="false">
-                                                        <i className="fa-solid fa-ellipsis-vertical" style={{marginTop:'10px'}}></i>
+                                                        <i className="fa-solid fa-ellipsis-vertical" style={{ marginTop: '10px' }}></i>
                                                         {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
                                                     </a>
 
@@ -415,7 +374,7 @@ function RoomChat() {
                                                             Dropdown button
                                                         </button>
                                                         <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item"><button onClick={()=>console.log('worrking')}> ok</button></a></li>
+                                                            <li><a class="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
                                                             <li><a class="dropdown-item">Another action</a></li>
                                                             <li><a class="dropdown-item">Something else here</a></li>
                                                         </ul>

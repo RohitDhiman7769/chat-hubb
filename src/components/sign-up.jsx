@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup"; // Import Yup for validation
-import Input from "./inputField"; // Ensure Input is properly imported
+import * as Yup from "yup"; 
+import Input from "./inputField"; 
 import './signUp.css'
 import GoogleAuth from "./google-auth";
 import AWS from "aws-sdk";
 import.meta.env.VITE_API_KEY
-// import apiService
+import { addImageInS3Bucket } from "../utils/chat-funtion";
 import apiService from "../apiService";
 import { useNavigate } from "react-router-dom";
 
@@ -18,52 +18,25 @@ const validationSchema = Yup.object().shape({
     confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match").min(6, "Confirm Password must be at least 6 characters").required("Confirm Password is required"),
 });
 
-function SignUp({updateCompValue}) {
+function SignUp({ updateCompValue }) {
     const navigate = useNavigate();
+    const [showSpinner, setShowSpinner] = useState(false)
 
     const formik = useFormik({
         initialValues: { email: "", password: "", confirmPassword: "", profilePicture: '' },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            AWS.config.update({
-                accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
-                secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
-            });
-            console.log('values')
-
-            const s3 = new AWS.S3({
-                params: { Bucket: 'rohit-dhiman-buckt' },
-                region: 'us-east-1',
-            });
-            console.log('values')
-
-            const params = {
-                Bucket: 'rohit-dhiman-buckt',
-                Key: values.profilePicture.name,
-                Body: values.profilePicture,
-            };
-
-            console.log('values')
-
+            const image = await addImageInS3Bucket(values.profilePicture)
             try {
-                const upload = s3
-                    .putObject(params)
-                    .on("httpUploadProgress", (evt) => {
-                        console.log("Uploading " + parseInt((evt.loaded * 100) / evt.total) + "%");
-                    })
-                    .promise();
-
-                await upload;
-
-                // Construct the file URL manually
-                const fileUrl = `https://rohit-dhiman-buckt.s3.eu-north-1.amazonaws.com/${params.Key}`;
+                setShowSpinner(true)
                 const response = await apiService.post("/sign-up", {
                     password: values.password,
                     email: values.email,
-                    profileImage: fileUrl
+                    profileImage: image
                 });
 
                 if (response.data.code == 200) {
+                    setShowSpinner(false)
                     alert(response.data.message)
                     updateCompValue(1)
                     navigate("/log-in");
@@ -80,6 +53,7 @@ function SignUp({updateCompValue}) {
 
     return (
         <div className="main auth_form">
+
             <div className="title">
                 <h1>Sign-Up</h1>
             </div>
@@ -131,7 +105,13 @@ function SignUp({updateCompValue}) {
                     />
                     {formik.touched.profilePicture && formik.errors.profilePicture && (<p style={{ color: "red" }}>{formik.errors.profilePicture}</p>)}
                     <div>
-                        <button type="submit">Submit</button>
+
+                        <button type="submit"> {showSpinner ?
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div> : <>Submit</>}</button>
                     </div>
 
                     <GoogleAuth />

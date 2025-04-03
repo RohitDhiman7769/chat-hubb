@@ -131,7 +131,7 @@ function UserProfileView({ userData ,setFieldValue}) {
                                             </div>
                                             <h2>Wall : </h2>
                                             <div className="chat_body " style={{ overflow: 'hidden' }}>
-                                                {messages.length > 0 ? (
+                                                {messages?.length > 0 ? (
 
                                                     messages.map((mes) => (
                                                         <>
