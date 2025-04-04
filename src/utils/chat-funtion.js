@@ -2,6 +2,11 @@ import AWS from "aws-sdk";
 import apiService from "../apiService";
 import.meta.env.VITE_API_KEY
 
+/**
+ * 
+ * @param {*} value get report user id and send into backend
+ * @returns fetch response
+ */
 export const ReportUserId = async (value) => {
     try {
         const response = await apiService.get(`/report-user?userId=${value}`);
@@ -11,6 +16,11 @@ export const ReportUserId = async (value) => {
     }
 };
 
+/**
+ * 
+ * @param {*} value get id to get single user profile 
+ * @returns 
+ */
 export const fetchParticularUserProfile = async (value) => {
     try {
         const response = await apiService.get(`/get-single-user-profile-data?userId=${value}`);
@@ -20,8 +30,12 @@ export const fetchParticularUserProfile = async (value) => {
     }
 };
 
+/**
+ * 
+ * @param {*} data get selcted image data 
+ * @returns a url get from S3 bucket
+ */
 export const addImageInS3Bucket = async (data) => {
-    console.log(data)
     try {
         AWS.config.update({
             accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
@@ -43,7 +57,6 @@ export const addImageInS3Bucket = async (data) => {
         try {
             const upload = s3.putObject(params)
                 .on("httpUploadProgress", (evt) => {
-                    // console.log("Uploading " + parseInt((evt.loaded * 100) / evt.total) + "%");
                 })
                 .promise();
             await upload;
@@ -57,14 +70,3 @@ export const addImageInS3Bucket = async (data) => {
     }
 };
 
-
-
-
-//   export const DeleteUserMessage =async (value) => {
-//     try {
-//         const response = await apiService.get(`/report-user?userId=${value}`);
-//         return response
-//     } catch (err) {
-//         console.log(err)
-//     }
-//   };
