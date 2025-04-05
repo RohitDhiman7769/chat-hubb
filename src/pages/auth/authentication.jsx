@@ -16,7 +16,7 @@ function Authentication() {
      */
     useEffect(() => {
         console.log( location.pathname)
-        location.pathname == '/log-in' ? setShowComp(1) : location.pathname == '/sign-up' ? setShowComp(2) : setShowComp(3)
+        location.pathname == '/log-in' || location.pathname == '/' ? setShowComp(1) : location.pathname == '/sign-up' ? setShowComp(2) : setShowComp(3)
     }, []);
 
 
