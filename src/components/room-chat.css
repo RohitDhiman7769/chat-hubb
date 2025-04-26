@@ -99,7 +99,38 @@
 
 
 
+.find_room{
+    width: 100%;
+  background-color: #475b6bc9;
+  border-radius:
+9px;
+  height: 51px;
+  color: #fff;
+  transition:
+all .5s ease;
+  margin-top: 20px;
+  margin-top: 18px;
+  max-width: 150px;
+}
+.room_inside_input_box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap:
+  6px;
+  
+  }
+  .room_inside_input_box input {
+    max-width: 247px;
+    margin-left: 0 !important;
+  }
 
+
+
+  .btn_box_room {
+    display: flex;
+    justify-content: flex-end;
+  }
 
 
 

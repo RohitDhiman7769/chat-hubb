@@ -101,15 +101,15 @@ function SignUp({ updateCompValue }) {
 
                     <input type="file" name="profilePicture" onChange={(event) => {
                         formik.setFieldValue("profilePicture", event.currentTarget.files[0]);
-                    }} className="password"
+                    }} className="password profilePicture_input"
                     />
                     {formik.touched.profilePicture && formik.errors.profilePicture && (<p style={{ color: "red" }}>{formik.errors.profilePicture}</p>)}
                     <div>
 
                         <button type="submit"> {showSpinner ?
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                            <div className="d-flex justify-content-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
                                 </div>
                             </div> : <>Submit</>}</button>
                     </div>

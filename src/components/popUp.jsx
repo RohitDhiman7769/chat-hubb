@@ -3,34 +3,34 @@ import Input from "./inputField";
 import apiService from "../apiService";
 import React from 'react';
 
-export default function PopUp({refOpenModal,inputRef,  refCloseModal, getAllUser,fetchUserList,listOfUsersToShow}){
+export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUser, fetchUserList, listOfUsersToShow }) {
     //    const inputRef = useRef()
     //    const [listOfUsers, setListOfUsers] = useState([])
-       const [selectedUserForFriend, setSelectedUserForFriend] = useState([])
-   
-   /**
-        * if user skip popup on click this function will be update into database
-        */
-       const skipInitialAddPopUp = async () => {
-           try {
-               const response = await apiService.get(`/update-initial-status?userId=${user}`);
-               localStorage.setItem('initial_login', 2)
-           } catch (err) {
-               console.log(err)
-           }
-       }
+    const [selectedUserForFriend, setSelectedUserForFriend] = useState([])
+
+    /**
+         * if user skip popup on click this function will be update into database
+         */
+    const skipInitialAddPopUp = async () => {
+        try {
+            const response = await apiService.get(`/update-initial-status?userId=${user}`);
+            localStorage.setItem('initial_login', 2)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
 
-         /**
-     * fetch all users from backend
-     */
+    /**
+* fetch all users from backend
+*/
     // const fetchAllUser = async () => {
     //     const response = await apiService.get(`/fetch-all-users?userId${user}`);
     //     setListOfUsers(response.data.data)
     //     inputRef.current.value = ''
     // }
 
-    
+
     /**
      * 
      * @param {*} value get selected user id to check in array if user exist it will be remove otherwise it will be push into array
@@ -47,29 +47,29 @@ export default function PopUp({refOpenModal,inputRef,  refCloseModal, getAllUser
         });
     };
 
-        /**
-         * 
-         * @param {*} value get input text to search user 
-         */
-        const searchUser = async (value) => {
-            console.log("Received from child:", value);
-            const response = await apiService.get(`/search-user?chr=${value}`);
-            // setListOfUsers(response.data.data)
-        };
+    /**
+     * 
+     * @param {*} value get input text to search user 
+     */
+    const searchUser = async (value) => {
+        console.log("Received from child:", value);
+        const response = await apiService.get(`/search-user?chr=${value}`);
+        // setListOfUsers(response.data.data)
+    };
 
 
 
-        const addFriend = () =>{
-            console.log(selectedUserForFriend)
-            fetchUserList(selectedUserForFriend)
-            // creatRoom()
-        }
+    const addFriend = () => {
+        console.log(selectedUserForFriend)
+        fetchUserList(selectedUserForFriend)
+        // creatRoom()
+    }
     return (
         <>
-        <button type="button" hidden ref={refOpenModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                </button>
-            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <button type="button" hidden ref={refOpenModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-scrollable">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -78,32 +78,37 @@ export default function PopUp({refOpenModal,inputRef,  refCloseModal, getAllUser
                         </div>
                         <div className="modal-body">
                             <div style={{ display: 'block' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', }}>
+                                <div className="pop_up_search" style={{ display: 'flex', justifyContent: 'space-between', }}>
                                     <Input placeholder={'Search user'} inputRef={inputRef} name={'searchUser'} setFieldValue={searchUser} paramToKnowComp={2} type={'text'} />
-                                    <button onClick={getAllUser} type="button" className="btn-close" ></button>
+                                    <button onClick={getAllUser} type="button" className={selectedUserForFriend.length > 0 ? 'check_btn color_check' : 'check_btn'} ><i className="fa-solid fa-square-check"></i></button>
                                 </div>
                                 {listOfUsersToShow?.map((user) => {
                                     return (
                                         <React.Fragment key={user._id}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', border: '1px solid black' }}>
-                                                <div className="image_box">
-                                                    <img className="rounded-circle" style={{ height: '80px', width: '80px', objectFit: 'cover' }} src={user.profile_img} alt="" />
-                                                </div>
-                                                <div className="person_status" style={{ paddingRight: '170px' }}>
-                                                    <h4 className="m-0 person_name_head">
-                                                        {user.email.split('@')[0]}
-                                                    </h4>
-                                                </div>
-                                                <div style={{ display: 'flex' }}>
+
+                                            <div className="user_parent position-relative">
                                                     <Input
                                                         setFieldValue={(e) => getSelectedAddedUserId(user._id)}
                                                         paramToKnowComp={3}
                                                         type={"checkbox"}
                                                         name={user._id}
-                                                        classname={"checkBox"}
+                                                        classname={"checkBox user_checkBox"}
                                                     />
+                                                <div className="user_list" style={{ display: 'flex', justifyContent: 'space-between', border: '1px solid black' }}>
+                                                    <div className="image_box">
+                                                        <img className="rounded-circle" style={{ height: '80px', width: '80px', objectFit: 'cover' }} src={user.profile_img} alt="" />
+                                                    </div>
+                                                    <div className="person_status" style={{ paddingRight: '170px' }}>
+                                                        <h4 className="m-0 person_name_head">
+                                                            {user.email.split('@')[0]}
+                                                        </h4>
+                                                    </div>
+
                                                 </div>
+
                                             </div>
+
+
                                         </React.Fragment>
                                     );
                                 })}

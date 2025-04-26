@@ -135,11 +135,12 @@ export default function SinglePersonChat() {
                                         <div className="chat_container position-relative">
                                             <h2 style={{ paddingTop: '20px', paddingLeft: '25px' }}>Chats</h2>
                                             <div className="chat_person_head  ">
+                                                
                                                 {showSpinner ?
                                                     <>
-                                                        <div class="d-flex justify-content-center">
-                                                            <div class="spinner-border" role="status">
-                                                                <span class="visually-hidden">Loading...</span>
+                                                        <div className="d-flex justify-content-center main_spinner_box">
+                                                            <div className="spinner-border" role="status">
+                                                                <span className="visually-hidden">Loading...</span>
                                                             </div>
                                                         </div>
                                                     </>

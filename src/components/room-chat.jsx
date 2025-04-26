@@ -71,7 +71,8 @@ function RoomChat() {
         try {
             const getRoomList = await apiService.get(`/room-list?userId=${currentUserId}`);
             setShowSpinner(false)
-            setRoomList(getRoomList.data.data)
+            console.log(getRoomList)
+            setRoomList(getRoomList.data.room_list)
         } catch (err) {
             console.log(err)
         }
@@ -96,8 +97,9 @@ function RoomChat() {
 
             modalCloseBtn.current.click()
             setShowChatComp(2)
-        } catch (err) {
-
+        }
+        catch (err) {
+            console.log(err)
         }
     }
 
@@ -154,14 +156,32 @@ function RoomChat() {
                                 <div className="row form_row">
                                     <div className="col-lg-12 fom_data ">
                                         <div className="chat_container position-relative">
-                                            <div className="chat_person_head d-flex justify-content-between align-items-center">
-                                                <div>
+                                            <div className="chat_person_head d-flex justify-content-between align-items-center pop_up_search ">
+                                                {/* <div>
                                                     <label>Search room: </label>
                                                     <Input type={Text} name={'searchRoom'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
                                                 </div>
                                                 <div>
                                                     <label>Creat room: </label>
                                                     <p onClick={() => setShowRoomCreatInput(true)}>+</p>
+                                                </div> */}
+                                                <div className='row w-100'>
+                                                    <div className='col-md-8'>
+                                                        <div className='room_inside_input_box'>
+                                                            <label>Search room: </label>
+                                                            <Input type={Text} name={'searchRoom'} placeholder={'Enter room name'} setFieldValue={setRoomName}
+                                                                paramToKnowComp={2} />
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-md-4'>
+                                                        <div className='btn_box_room'>
+                                                        <button className='find_room float-right' onClick={() => setShowRoomCreatInput(true)}>
+                                                            Creat room: +
+                                                        </button>
+                                                        </div>
+                                                       
+
+                                                    </div>
                                                 </div>
 
 
@@ -172,9 +192,9 @@ function RoomChat() {
                                                 <>
                                                     {showSpinner ?
                                                         <>
-                                                            <div class="d-flex justify-content-center">
-                                                                <div class="spinner-border" role="status">
-                                                                    <span class="visually-hidden">Loading...</span>
+                                                            <div className="d-flex justify-content-center">
+                                                                <div className="spinner-border" role="status">
+                                                                    <span className="visually-hidden">Loading...</span>
                                                                 </div>
                                                             </div>
 
@@ -200,29 +220,31 @@ function RoomChat() {
 
                                                 (<div className="chat_body ">
                                                     {showRoomCreatInput ?
-                                                        <div style={{ display: 'block', justifyContent: 'center', marginLeft: '236px', marginTop: '100px' }}>
-                                                            <div>
+
+                                                    
+                                                        <div className='main auth_form' style={{ display: 'block', justifyContent: 'center', marginLeft: 'auto', marginTop: '40px' }}>
+                                                            <div className='room_input_box'>
                                                                 <label style={{ marginLeft: '16px' }}>Enter room name : </label>
-                                                                <Input type={Text} name={'roomchat'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
+                                                                <Input classname={'input_text'} type={Text} name={'roomchat'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
                                                             </div>
 
-                                                            <div style={{ marginTop: '10px' }}>
+                                                            <div className='room_input_box' style={{ marginTop: '10px' }}>
                                                                 <label>Room profile image : </label>
                                                                 <input type="file" name="profilePicture" onChange={(event) => {
                                                                     setSelecetedRoomImage(event.currentTarget.files[0]);
                                                                 }} className="password" />
                                                             </div>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
+                                                            <div className='room_input_box' style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
                                                                 <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
                                                                 <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
                                                             </div>
-                                                            <div style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
-                                                                <button onClick={getUserList} disabled={roomName === ''}>Add Member</button>
+                                                            <div  style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
+                                                                <button className='find_room ' onClick={getUserList} disabled={roomName === ''}>Add Member</button>
                                                                 {/* <button onClick={getRoomName} disabled={roomName === ''}>Add Member</button> */}
                                                             </div>
                                                         </div>
                                                         :
-                                                        <div style={{ display: 'flex', justifyContent: 'center' }} >
+                                                        <div className='no_data' style={{ display: 'flex', justifyContent: 'center' }} >
                                                             <h2>No room exisst</h2>
                                                         </div>
                                                     }
@@ -369,14 +391,14 @@ function RoomChat() {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <div className="dropdown">
+                                                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             Dropdown button
                                                         </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
-                                                            <li><a class="dropdown-item">Another action</a></li>
-                                                            <li><a class="dropdown-item">Something else here</a></li>
+                                                        <ul className="dropdown-menu">
+                                                            <li><a className="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
+                                                            <li><a className="dropdown-item">Another action</a></li>
+                                                            <li><a className="dropdown-item">Something else here</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>

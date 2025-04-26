@@ -154,7 +154,7 @@ function UserProfileView({ userData ,setFieldValue}) {
                                                     ))
 
                                                 ) : (
-                                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <div className='no_data' style={{ display: 'flex', justifyContent: 'center' }}>
 
                                                         <h2>No Wall message yet!</h2>
                                                     </div>

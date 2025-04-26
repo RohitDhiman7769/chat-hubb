@@ -134,10 +134,10 @@ function Profile() {
                                                     </div>
                                                 </div>
                                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <h1 style={{ margin: '20px' }}>{userData?.email.split('@')[0]}</h1>
+                                                    <h1 className="namePRofile" style={{ margin: '20px' }}>{userData?.email.split('@')[0]}</h1>
                                                 </div>
                                             </div>
-                                            <h2>Add Request : </h2>
+                                            <h2 className="add_request">Add Request : </h2>
                                             {requestToAddData.length > 0 ? (
                                                 requestToAddData.map((user) => (
     
@@ -158,9 +158,9 @@ function Profile() {
                                                     </React.Fragment>
                                                 ))
                                             ) : (
-                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                <div className="no_data" style={{ display: 'flex', justifyContent: 'center' }}>
     
-                                                    <h2>No Request Exist</h2>
+                                                    <h2> <i className="fa-regular fa-message"></i> No Request Exist</h2>
                                                 </div>
     
                                             )}
