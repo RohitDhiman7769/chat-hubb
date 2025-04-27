@@ -130,7 +130,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
         <>
             {showSpinner ?
                 <>
-                    <div className="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center main_spinner_box">
                         <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div>
@@ -236,7 +236,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
                             ))
                         ) : (
                             <>
-                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div className="no_data" style={{ display: 'flex', justifyContent: 'center' }}>
                                     <h2>No Wall message yet!</h2>
                                 </div>
                             </>

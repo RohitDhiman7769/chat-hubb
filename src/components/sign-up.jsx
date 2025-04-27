@@ -101,7 +101,7 @@ function SignUp({ updateCompValue }) {
 
                     <input type="file" name="profilePicture" onChange={(event) => {
                         formik.setFieldValue("profilePicture", event.currentTarget.files[0]);
-                    }} className="password"
+                    }} className="password profilePicture_input"
                     />
                     {formik.touched.profilePicture && formik.errors.profilePicture && (<p style={{ color: "red" }}>{formik.errors.profilePicture}</p>)}
                     <div>

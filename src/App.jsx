@@ -9,6 +9,7 @@ import Home from './pages/home/home';
 
 function App() {
   const isLoggedIn = localStorage.getItem('user_id')
+  console.log(isLoggedIn)
   return (
       <Routes>
         <Route exact path='/' element={isLoggedIn ? <Home/> : <Authenctication/> } />

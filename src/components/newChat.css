@@ -219,6 +219,7 @@
     width: 40px;
     border-radius: 100px;
     object-fit: cover;
+    border: 1px solid #00000052 !important;
   }
   
   .chat_inner .messsage {
