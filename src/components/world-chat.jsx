@@ -20,7 +20,6 @@ function WorldChat() {
     useEffect(() => {
         if (ChatComponent.current) {
             ChatComponent.current.callChatFunct()
-
         }
     }, [chatComp])
 
@@ -30,8 +29,9 @@ function WorldChat() {
        * @param {*} data fetch user profile for view
        */
     const showUserProfileComp = async (data) => {
+        console.log(data)
         try {
-            const response = await fetchParticularUserProfile(data.user);
+            const response = await fetchParticularUserProfile(data);
             console.log(response)
             if (response.status == 200) {
                 setUserProfileViewData(response.data.data)

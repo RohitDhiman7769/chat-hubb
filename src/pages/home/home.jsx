@@ -30,7 +30,7 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        console.log( location.pathname)
+        console.log(location.pathname)
         location.pathname == '/home' ? setShowComp(1) : location.pathname == '/room' ? setShowComp(2) : location.pathname == '/world-chat' ? setShowComp(3) : location.pathname == '/wall' ? setShowComp(4) : setShowComp(5)
     }, []);
 
@@ -41,7 +41,7 @@ function Home() {
 
     return (
         <>
-        
+
             <div className="container">
                 <div className="main">
                     <div className="auth-nav">
@@ -85,7 +85,7 @@ function Home() {
                     <div className="auth-main">
                         {showComp == 1 && <><SinglePersonChat /></>}
                         {showComp == 2 && <><RoomChat /></>}
-                        {showComp == 3 && <>  <WorldChat /> </>}
+                        {showComp == 3 && <><WorldChat /> </>}
                         {showComp == 4 && <><Wall /></>}
                         {showComp == 5 && <><Profile /></>}
                     </div>

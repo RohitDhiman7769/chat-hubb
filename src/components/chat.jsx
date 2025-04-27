@@ -8,6 +8,8 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
     const [showSpinner, setShowSpinner] = useState(true)
+    const bottomRef = useRef(null);
+
 
     useImperativeHandle(ref, () => ({
         callChatFunct: () => {
@@ -21,15 +23,27 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
         const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
 
         // Real-time listener for messages
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setShowSpinner(false)
-            setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-        });
+        try{
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                setShowSpinner(false)
+                setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+                // bottomRef.current.scrollIntoView({ behavior: "smooth" });
+            });
+            return () => unsubscribe();
+        }catch(err){
+            console.log(err)
+        }
+     
 
-        return () => unsubscribe();
 
     }
 
+    useEffect(() => {
+        if (bottomRef.current) {
+        //   bottomRef.current.scrollIntoView({ behavior: "smooth" });
+        bottomRef.current.scrollIntoView({ behavior:  "auto" });
+        }
+      }, [messages]);
     /**
      * sent message
      */
@@ -116,9 +130,9 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
         <>
             {showSpinner ?
                 <>
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    <div className="d-flex justify-content-center">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     </div>
 
@@ -126,14 +140,14 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
                 :
                 <>
   
-                    <div className="chat_body ">
+                    <div className="chat_body " >
                         {messages?.length > 0 ? (
                             messages?.map((mes, index) => (
                                 <>
                                     {(formatTimestamp(messages[index - 1]?.createdAt, 1) != formatTimestamp(mes.createdAt, 1)) && <p className="m-0 date_body">{formatTimestamp(mes.createdAt, 1)}</p>}
                                     {mes.user == currentUserId
                                         ?
-                                        <div key={mes.id} className="right_chat chat_main d-flex justify-content-end align-items-end">
+                                        <div  key={mes.id} className="right_chat chat_main d-flex justify-content-end align-items-end">
                                             <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
                                                 <i className="fa-solid fa-ellipsis-vertical"></i>
@@ -152,7 +166,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
                                                 </li>
 
                                             </ul>
-                                            <div className="chat_inner d-flex justify-content-start align-items-center">
+                                            <div className="chat_inner d-flex justify-content-start align-items-center" ref={bottomRef}>
                                                 {mes.type == 'file' ?
                                                     <>
                                                         <div className="image_box">
@@ -174,12 +188,12 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
                                             </div>
                                         </div>
                                         :
-                                        <div key={mes.id} className="left_chat chat_main d-flex justify-content-start align-items-end">
+                                        <div  key={mes.id} className="left_chat chat_main d-flex justify-content-start align-items-end">
                                             <div className="image_box" style={{ cursor: 'pointer' }} onClick={() => getUserId(mes)}>
                                                 <img style={{ border: '1px solid black', borderRadius: '100px' }} src={mes.image} alt="Avatar" />
                                             </div>
                                             <div className="chat_inner d-flex justify-content-start align-items-center">
-                                                <div className="messsage">
+                                                <div className="messsage" ref={bottomRef}>
                                                     <p style={{ fontWeight: '700' }}>
                                                         {mes.name}
                                                     </p>
@@ -238,7 +252,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
 
             }
             {paramToKnowComponent != 2 && 
-             <div className="main_chat_send position-relative">
+             <div className="main_chat_send position-relative" >
              <div className="chat_send_box position-relative">
                  <div className="input_box">
                      <textarea type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className="inPut_send" placeholder="Skriv meddelande..." rows="1"></textarea>

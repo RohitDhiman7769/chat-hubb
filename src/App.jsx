@@ -10,7 +10,6 @@ import Home from './pages/home/home';
 function App() {
   const isLoggedIn = localStorage.getItem('user_id')
   return (
-    // <Router>
       <Routes>
         <Route exact path='/' element={isLoggedIn ? <Home/> : <Authenctication/> } />
         <Route path='/room' element={isLoggedIn ? <Home/> : <Authenctication/> } />
@@ -21,9 +20,7 @@ function App() {
         <Route path='/world-chat' element={isLoggedIn ? <Home/> : <Authenctication/> } />
         <Route path='/wall' element={isLoggedIn ? <Home/> : <Authenctication/> } />
         <Route path='/profile' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        {/* <Route path='/forget-password' Component={Home} /> */}
       </Routes>
-    // </Router>
 
   )
 }

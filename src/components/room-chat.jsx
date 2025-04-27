@@ -172,16 +172,16 @@ function RoomChat() {
                                                 <>
                                                     {showSpinner ?
                                                         <>
-                                                            <div class="d-flex justify-content-center">
-                                                                <div class="spinner-border" role="status">
-                                                                    <span class="visually-hidden">Loading...</span>
+                                                            <div className="d-flex justify-content-center">
+                                                                <div className="spinner-border" role="status">
+                                                                    <span className="visually-hidden">Loading...</span>
                                                                 </div>
                                                             </div>
 
                                                         </>
                                                         :
                                                         <div className="chat_person_head  ">
-                                                            {roomList.map((room) => (
+                                                            {roomList && roomList.map((room) => (
                                                                 <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
                                                                     <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
                                                                         <div className="image_box">
@@ -369,14 +369,14 @@ function RoomChat() {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <div className="dropdown">
+                                                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                             Dropdown button
                                                         </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
-                                                            <li><a class="dropdown-item">Another action</a></li>
-                                                            <li><a class="dropdown-item">Something else here</a></li>
+                                                        <ul className="dropdown-menu">
+                                                            <li><a className="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
+                                                            <li><a className="dropdown-item">Another action</a></li>
+                                                            <li><a className="dropdown-item">Something else here</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>

@@ -2,9 +2,10 @@ import myImage from '../assets/back.png';
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { db } from '../firebase-config';
+import apiService from '../apiService';
 // import firebase from 'firebase/compat/app';
 
-function UserProfileView({ userData ,setFieldValue}) {
+function UserProfileView({ userData, setFieldValue }) {
     // const firestore = firebase.firestore()
     const [newMessage, setNewMessage] = useState("")
     const [messages, setMessages] = useState([])
@@ -74,9 +75,20 @@ function UserProfileView({ userData ,setFieldValue}) {
         }
     };
 
-    const goBack = () =>{
+    const goBack = () => {
 
         setFieldValue(true)
+    }
+
+    const sendaddFriendRequest =async() => {
+
+        console.log('work')
+        const response = await apiService.post(`/add-friend`, {
+            user_id: localStorage.getItem('user_id'),
+            arrayOfAddedUsersId: [userData._id]
+        });
+
+        console.log(response)
     }
 
     return (
@@ -102,6 +114,7 @@ function UserProfileView({ userData ,setFieldValue}) {
                                                     <h4 style={{ paddingLeft: '20px' }} className="m-o person_name_head">
                                                         {userData?.email}
                                                     </h4>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -127,6 +140,10 @@ function UserProfileView({ userData ,setFieldValue}) {
 
                                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                     <h1 style={{ margin: '20px' }}>{userData?.email.split('@')[0]}</h1>
+                                                </div>
+
+                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                    <button onClick={sendaddFriendRequest}>Click to send friend request</button>
                                                 </div>
                                             </div>
                                             <h2>Wall : </h2>

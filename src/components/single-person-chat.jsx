@@ -137,9 +137,9 @@ export default function SinglePersonChat() {
                                             <div className="chat_person_head  ">
                                                 {showSpinner ?
                                                     <>
-                                                        <div class="d-flex justify-content-center">
-                                                            <div class="spinner-border" role="status">
-                                                                <span class="visually-hidden">Loading...</span>
+                                                        <div className="d-flex justify-content-center">
+                                                            <div className="spinner-border" role="status">
+                                                                <span className="visually-hidden">Loading...</span>
                                                             </div>
                                                         </div>
                                                     </>
@@ -161,9 +161,16 @@ export default function SinglePersonChat() {
                                                                 )
                                                             })
                                                             :
-                                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                                <p>No chat exist</p>
-                                                            </div>
+                                                            <>
+                                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                                    <p>No chat exist</p>
+
+
+                                                                </div>
+                                                                <div>
+                                                                    <span style={{fontWeight:700}}>Note:</span> <span>First add friend from world chat or Search user name</span>
+                                                                </div>
+                                                            </>
                                                         }
                                                     </>
 
@@ -210,8 +217,6 @@ export default function SinglePersonChat() {
                                                                 </h1>
                                                                 <p className="last_seen">
                                                                     <i className="fa-solid fa-circle onlineDot"></i> Online
-
-
                                                                 </p>
                                                             </div>
                                                         </div>
