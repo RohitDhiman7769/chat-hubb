@@ -40,36 +40,36 @@ export default function SinglePersonChat() {
         }
     }, [showUserChat]);
 
-    useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8000/api/users/ws');
+    // useEffect(() => {
+    //     const socket = new WebSocket('ws://localhost:8000/api/users/ws');
 
-        console.log(socket)
-        socket.onopen = () => {
-            console.log('Connected to WebSocket');
-        };
+    //     console.log(socket)
+    //     socket.onopen = () => {
+    //         console.log('Connected to WebSocket');
+    //     };
 
-        socket.onmessage = (event) => {
-            console.log('Message from server:', event.data);
+    //     socket.onmessage = (event) => {
+    //         console.log('Message from server:', event.data);
 
-            if (event.data === "Database changed!") {
-                // 🔥 Now call your API to fetch latest data
-                fetch('http://localhost:8000/api/users/simulate_db_change')
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log('Fetched new data:', data);
-                        // Update your UI state here
-                    });
-            }
-        };
+    //         if (event.data === "Database changed!") {
+    //             // 🔥 Now call your API to fetch latest data
+    //             fetch('http://localhost:8000/api/users/simulate_db_change')
+    //                 .then(res => res.json())
+    //                 .then(data => {
+    //                     console.log('Fetched new data:', data);
+    //                     // Update your UI state here
+    //                 });
+    //         }
+    //     };
 
-        socket.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
+    //     socket.onclose = () => {
+    //         console.log('WebSocket connection closed');
+    //     };
 
-        return () => {
-            socket.close();
-        };
-    }, [])
+    //     return () => {
+    //         socket.close();
+    //     };
+    // }, [])
 
 
     /**
@@ -108,9 +108,6 @@ export default function SinglePersonChat() {
         setListOfUsers(response.data.data)
         inputRef.current.value = ''
     }
-
-
-
 
     const showChat = (data) => {
         console.log(data)
@@ -151,8 +148,7 @@ export default function SinglePersonChat() {
 
     if (showUserChat == 1) {
         return (
-            <>
-
+            <> 
                 <section className="chat_main_section">
                     <div className="container-fluid">
                         <div className="container">

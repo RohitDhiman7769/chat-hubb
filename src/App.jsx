@@ -1,63 +1,73 @@
-import { useEffect, useState } from 'react'
 import './App.css'
-import React from 'react';
-import { Route, Router, Routes } from 'react-router-dom';
+import React, {lazy, Suspense} from 'react';
 import Authenctication from './pages/auth/authentication'
-import Home from './pages/home/home';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Header from './components/header';
 
+const SinglePersonChat = lazy(()=>import('./components/single-person-chat'))
+const RoomChat = lazy(()=>import('./components/room-chat'))
+const Wall = lazy(()=>import('./components/Wall'))
+const WorldChat = lazy(()=>import('./components/world-chat'))
+const Profile = lazy(()=>import('./components/profile'))
 
+const AppLayout = () => {
+  return (
+    <div className="container">
+      <div className="main">
+        <Header />
+        <div className="auth-main">
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  )
 
+}
 
 function App() {
   const isLoggedIn = localStorage.getItem('user_id')
-  console.log(isLoggedIn)
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
-    },
-    {
-      path: "/room",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+      element: isLoggedIn ? <AppLayout /> : <Authenctication />,
+      children: [
+        {
+          path: "/home",
+          element:<Suspense> <SinglePersonChat /></Suspense>,
+        },
+        {
+          path: "/room",
+          element: <Suspense><RoomChat /></Suspense>,
+        },
+        {
+          path: "/world-chat",
+          element:<Suspense> <WorldChat /></Suspense>,
+        },
+        {
+          path: "/wall",
+          element:<Suspense> <Wall /></Suspense>,
+        },
+        {
+          path: "/profile",
+          element:<Suspense> <Profile /></Suspense>,
+        },
+      ]
     },
     {
       path: "/log-in",
-      element :  <Authenctication/> ,
+      element: <Authenctication />,
     },
     {
       path: "/sign-up",
-      element :  <Authenctication/> ,
+      element: <Authenctication />,
     },
     {
       path: "/forget-password",
-      element : <Authenctication/> ,
+      element: <Authenctication />,
     },
-    {
-      path: "/home",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
-    },
-    {
-      path: "/world-chat",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
-    },
-    {
-      path: "/wall",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
-    },
-    {
-      path: "/profile",
-      element : isLoggedIn ? <Home/> : <Authenctication/> ,
-    },
-    
   ]);
   return (
-      <RouterProvider router={router} />
-
+    <RouterProvider router={router} />
   )
 }
 
