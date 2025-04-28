@@ -2,7 +2,6 @@ import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } 
 import { useEffect, useState, useRef } from "react";
 import UserProfileView from "./userProfileView";
 import apiService from "../apiService";
-import Input from "./inputField";
 import React from 'react';
 import { db } from '../firebase-config';
 import './single-person-chat.css'
@@ -25,44 +24,72 @@ export default function SinglePersonChat() {
     const [usersList, setUsersList] = useState([])
     const [showUserChat, setShowUserChat] = useState(1)
     const [currentChatUserData, setCurrentChatUserData] = useState()
-    // Detect state change using useEffect
-    useEffect(() => {
-        console.log("Updated Value in useEffect:", showUserChat);
 
+    useEffect(() => {
+        const checkInitialLogin = localStorage.getItem('initial_login')
+        fetchData(checkInitialLogin);
+    }, [])
+
+    useEffect(() => {
+    }, [listOfUsers]);
+
+
+    useEffect(() => {
         if (showUserChat == 2 && ChatComponent.current) {
             ChatComponent.current.callChatFunct();
-
         }
     }, [showUserChat]);
 
     useEffect(() => {
-        const checkInitialLogin = localStorage.getItem('initial_login')
+        const socket = new WebSocket('ws://localhost:8000/api/users/ws');
 
-        const fetchData = async () => {
-            try {
-                if (checkInitialLogin == 1) {
-                    modalOpenBtn.current.click()
-                    fetchAllUser()
-                } else {
-                    const response = await apiService.get(`/added-users-list?userId=${user}`);
-                    setShowSpinner(false)
-                    setUsersList(response.data.data)
+        console.log(socket)
+        socket.onopen = () => {
+            console.log('Connected to WebSocket');
+        };
 
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
+        socket.onmessage = (event) => {
+            console.log('Message from server:', event.data);
+
+            if (event.data === "Database changed!") {
+                // 🔥 Now call your API to fetch latest data
+                fetch('http://localhost:8000/api/users/simulate_db_change')
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('Fetched new data:', data);
+                        // Update your UI state here
+                    });
             }
         };
-        fetchData();
+
+        socket.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        return () => {
+            socket.close();
+        };
     }, [])
 
-    useEffect(() => {
-        // console.log()
-        console.log("Updated State:", listOfUsers);
 
+    /**
+     * fetch added user list
+     */
+    const fetchData = async (checkInitialLogin) => {
+        try {
+            if (checkInitialLogin == 1) {
+                modalOpenBtn.current.click()
+                fetchAllUser()
+            } else {
+                const response = await apiService.get(`/added-users-list?userId=${user}`);
+                setShowSpinner(false)
+                setUsersList(response.data.data)
 
-    }, [listOfUsers]);
-
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const getUserName = () => {
         console.log('emial', currentChatUserData?.email)
@@ -135,7 +162,7 @@ export default function SinglePersonChat() {
                                         <div className="chat_container position-relative">
                                             <h2 style={{ paddingTop: '20px', paddingLeft: '25px' }}>Chats</h2>
                                             <div className="chat_person_head  ">
-                                                
+
                                                 {showSpinner ?
                                                     <>
                                                         <div className="d-flex justify-content-center main_spinner_box">
@@ -169,7 +196,7 @@ export default function SinglePersonChat() {
 
                                                                 </div>
                                                                 <div>
-                                                                    <span style={{fontWeight:700}}>Note:</span> <span>First add friend from world chat or Search user name</span>
+                                                                    <span style={{ fontWeight: 700 }}>Note:</span> <span>First add friend from world chat or Search user name</span>
                                                                 </div>
                                                             </>
                                                         }

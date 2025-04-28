@@ -6,46 +6,48 @@ import React from "react";
 import UserProfileView from "./userProfileView";
 import.meta.env.VITE_API_KEY
 
-function Profile() { 
+function Profile() {
     const navigate = useNavigate();
     const [userData, setUserData] = useState()
     const [requestToAddData, setRequestToAddData] = useState([])
-    const [isShowUserProfileComponent , setShowUserProfileComponent] = useState(true)
-    const [ userProfileViewData, setUserProfileViewData] = useState()
+    const [isShowUserProfileComponent, setShowUserProfileComponent] = useState(true)
+    const [userProfileViewData, setUserProfileViewData] = useState()
+
     useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const response = await apiService.get(`/profile?user_id=${localStorage.getItem('user_id')}`);
-                console.log(response)
-                setUserData(response.data.data.profileData)
-                setRequestToAddData(response.data.data.addingRequest)
-
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-            console.log(requestToAddData)
-        };
-
         fetchUserProfile();
     }, [])
+    /**
+     * fetch user profile to show 
+     */
+    const fetchUserProfile = async () => {
+        try {
+            const response = await apiService.get(`/profile?user_id=${localStorage.getItem('user_id')}`);
+            console.log(response)
+            setUserData(response.data.data.profileData)
+            setRequestToAddData(response.data.data.addingRequest)
 
-
-
-    const confirmAddRequest = async (id) => {
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
         console.log(requestToAddData)
+    };
 
+    /**
+     * 
+     * @param {*} id get user id which friend request has been accepted
+     */
+    const confirmAddRequest = async (id) => {
         const response = await apiService.post(`/confirm-request`, {
             user_id: localStorage.getItem('user_id'),
             confirm_user_request_id: id
         });
 
-        console.log(requestToAddData)
-        console.log(response?.data.data._id)
         setRequestToAddData(requestToAddData.filter(item => item._id !== response?.data.data._id))
-        console.log(requestToAddData)
-
     }
 
+    /**
+     * Logout user account
+     */
     const logOut = () => {
         localStorage.removeItem('auth_token')
         localStorage.removeItem('email')
@@ -56,29 +58,32 @@ function Profile() {
 
     }
 
-
+ /**
+  * 
+  * @param {*} data  show user profile comp
+  */
     const showUserProfileComponent = (data) => {
         console.log(data)
         setShowUserProfileComponent(false)
         setUserProfileViewData(data)
     }
 
-    if(isShowUserProfileComponent){
+    if (isShowUserProfileComponent) {
         return (
             <section className="chat_main_section">
                 <div className="container-fluid">
                     <div className="container">
-    
+
                         <div className="main_form">
                             <div className="row form_row">
-    
-    
+
+
                                 <div className="col-lg-12 fom_data ">
-    
+
                                     <div className="chat_container position-relative">
                                         <div className="chat_person_head d-flex justify-content-between align-items-center">
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
-    
+
                                                 <div className="person_status">
                                                     {/* <h1>{import.meta.env.VITE_BACKEND_URL}</h1> */}
                                                     <h2 style={{ fontWeight: '700' }} className="m-o person_name_head">
@@ -88,7 +93,7 @@ function Profile() {
                                                     <h4 style={{ paddingLeft: '20px' }} className="m-o person_name_head">
                                                         {userData?.email}
                                                     </h4>
-    
+
                                                 </div>
                                             </div>
                                             <div className="dropdown setting_drop three_dot seeting_btn_desktop">
@@ -97,7 +102,7 @@ function Profile() {
                                                     <i className="fa-solid fa-ellipsis-vertical"></i>
                                                     {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
                                                 </a>
-    
+
                                                 <ul className="dropdown-menu">
                                                     <li onClick={logOut}>
                                                         <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
@@ -110,14 +115,14 @@ function Profile() {
                                                             <img src="assets/images/delete.svg" alt="" />
                                                             Delete Account</a>
                                                     </li>
-    
+
                                                 </ul>
                                             </div>
                                         </div>
                                         <div className="chat_body ">
-    
+
                                             <div style={{ borderBottom: '1px solid lightGrey' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                     <div style={{ marginTop: '20px' }}>
                                                         <img
                                                             className="profile-img"
@@ -140,9 +145,9 @@ function Profile() {
                                             <h2 className="add_request">Add Request : </h2>
                                             {requestToAddData.length > 0 ? (
                                                 requestToAddData.map((user) => (
-    
+
                                                     <React.Fragment key={user._id}>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between',paddingTop : '13px' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '13px' }}>
                                                             <div className="image_box" style={{ cursor: 'pointer' }} onClick={() => showUserProfileComponent(user)}>
                                                                 <img className="rounded-circle" style={{ border: '1px solid black ', height: '80px', width: '80px', objectFit: 'cover' }} src={user.profile_img} alt="" />
                                                             </div>
@@ -159,12 +164,12 @@ function Profile() {
                                                 ))
                                             ) : (
                                                 <div className="no_data" style={{ display: 'flex', justifyContent: 'center' }}>
-    
+
                                                     <h2> <i className="fa-regular fa-message"></i> No Request Exist</h2>
                                                 </div>
-    
+
                                             )}
-    
+
                                         </div>
                                     </div>
                                 </div>
@@ -174,22 +179,22 @@ function Profile() {
                 </div>
             </section>
         )
-    }{
+    } {
         return (
             <>
-                <UserProfileView  userData={userProfileViewData} setFieldValue={setShowUserProfileComponent}/>
-    
-    
+                <UserProfileView userData={userProfileViewData} setFieldValue={setShowUserProfileComponent} />
+
+
             </>
-    
+
         )
     }
-   
 
 
 
 
-   
+
+
 
 }
 export default Profile;

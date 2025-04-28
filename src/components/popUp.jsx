@@ -4,10 +4,7 @@ import apiService from "../apiService";
 import React from 'react';
 
 export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUser, fetchUserList, listOfUsersToShow }) {
-    //    const inputRef = useRef()
-    //    const [listOfUsers, setListOfUsers] = useState([])
     const [selectedUserForFriend, setSelectedUserForFriend] = useState([])
-
     /**
          * if user skip popup on click this function will be update into database
          */
@@ -20,15 +17,6 @@ export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUse
         }
     }
 
-
-    /**
-* fetch all users from backend
-*/
-    // const fetchAllUser = async () => {
-    //     const response = await apiService.get(`/fetch-all-users?userId${user}`);
-    //     setListOfUsers(response.data.data)
-    //     inputRef.current.value = ''
-    // }
 
 
     /**
@@ -66,10 +54,10 @@ export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUse
     }
     return (
         <>
-        <button type="button" hidden ref={refOpenModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Launch demo modal
-                </button>
-           
+            <button type="button" hidden ref={refOpenModal} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
+
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-scrollable">
                     <div className="modal-content">
@@ -88,13 +76,13 @@ export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUse
                                         <React.Fragment key={user._id}>
 
                                             <div className="user_parent position-relative">
-                                                    <Input
-                                                        setFieldValue={(e) => getSelectedAddedUserId(user._id)}
-                                                        paramToKnowComp={3}
-                                                        type={"checkbox"}
-                                                        name={user._id}
-                                                        classname={"checkBox user_checkBox"}
-                                                    />
+                                                <Input
+                                                    setFieldValue={(e) => getSelectedAddedUserId(user._id)}
+                                                    paramToKnowComp={3}
+                                                    type={"checkbox"}
+                                                    name={user._id}
+                                                    classname={"checkBox user_checkBox"}
+                                                />
                                                 <div className="user_list" style={{ display: 'flex', justifyContent: 'space-between', border: '1px solid black' }}>
                                                     <div className="image_box">
                                                         <img className="rounded-circle" style={{ height: '80px', width: '80px', objectFit: 'cover' }} src={user.profile_img} alt="" />

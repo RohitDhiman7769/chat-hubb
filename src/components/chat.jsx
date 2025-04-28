@@ -44,6 +44,8 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
         bottomRef.current.scrollIntoView({ behavior:  "auto" });
         }
       }, [messages]);
+
+      
     /**
      * sent message
      */

@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import './inputField.css'
 function Input({ placeholder, type, name, classname, setFieldValue, paramToKnowComp, value , inputRef}) {
-  //   const [count, setCount] = useState(0)
 
   const handleChange = (event) => {
-
     if (paramToKnowComp == 1) {
       setFieldValue(name, event.target.value); // Send data to parent
     } else if (paramToKnowComp == 2) {

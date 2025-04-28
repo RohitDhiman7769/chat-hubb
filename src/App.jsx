@@ -4,24 +4,59 @@ import React from 'react';
 import { Route, Router, Routes } from 'react-router-dom';
 import Authenctication from './pages/auth/authentication'
 import Home from './pages/home/home';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
 
 
 
 function App() {
   const isLoggedIn = localStorage.getItem('user_id')
   console.log(isLoggedIn)
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    {
+      path: "/room",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    {
+      path: "/log-in",
+      element :  <Authenctication/> ,
+    },
+    {
+      path: "/sign-up",
+      element :  <Authenctication/> ,
+    },
+    {
+      path: "/forget-password",
+      element : <Authenctication/> ,
+    },
+    {
+      path: "/home",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    {
+      path: "/world-chat",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    {
+      path: "/wall",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    {
+      path: "/profile",
+      element : isLoggedIn ? <Home/> : <Authenctication/> ,
+    },
+    
+  ]);
   return (
-      <Routes>
-        <Route exact path='/' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        <Route path='/room' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        <Route path='/log-in' Component={Authenctication} />
-        <Route path='/sign-up' Component={Authenctication} />
-        <Route path='/forget-password' Component={Authenctication} />
-        <Route path='/home' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        <Route path='/world-chat' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        <Route path='/wall' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-        <Route path='/profile' element={isLoggedIn ? <Home/> : <Authenctication/> } />
-      </Routes>
+      <RouterProvider router={router} />
 
   )
 }

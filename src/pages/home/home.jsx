@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
 import "./home.css";
-// import { Link } from "react-router";
-import { Route, Routes } from 'react-router';
-// import Input from "../../components/inputField";
-// import Login from "../../components/loginComp";
-// import SignUp from "../../components/sign-up";
-// import ForgetPassword from "../../components/forgetPassowrd";
 import { useNavigate } from "react-router-dom";
 import RoomChat from "../../components/room-chat";
 import Wall from "../../components/wall";
@@ -13,11 +7,14 @@ import WorldChat from "../../components/world-chat";
 import Profile from "../../components/profile";
 import SinglePersonChat from "../../components/single-person-chat";
 import { useLocation } from "react-router-dom";
+import useOnlineStatus from "../../utils/useOnlineStatus";
 
 function Home() {
     const navigate = useNavigate();
     const [showComp, setShowComp] = useState(1);
     const location = useLocation();
+    const onlineStatus = useOnlineStatus()
+    console.log(onlineStatus)
 
     /**
      * set state one for first time
@@ -25,7 +22,7 @@ function Home() {
     useEffect(() => {
         setShowComp(1);
         console.log('working')
-
+   
 
     }, []);
 
@@ -50,7 +47,7 @@ function Home() {
                             className={` navBtn ${showComp === 1 ? "bg-white text-darkBlue" : "bg-darkBlue text-white"}`}
                             onClick={() => handleNavbar(1, "/home")}  // Redirect on div click
                         >
-                            Home
+                            {onlineStatus ? 'online' : 'offline'}
                         </div>
                         <div
                             style={{ width: "165px" }}
