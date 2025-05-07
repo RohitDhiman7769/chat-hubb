@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import './header.css'
-import {  } from "react-router-dom";
+import { } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux'
+
+import { addItem } from "../../utils/cartSlice";
+
+
 function Header(props) {
     const navigate = useNavigate();
     const [showComp, setShowComp] = useState(1);
     const location = useLocation();
+
+
+    const cart = useSelector((store) => store.cart.items.val)
+
     /**
      * set state one for first time
      */
@@ -22,6 +31,12 @@ function Header(props) {
         navigate(routePath);
     };
 
+    const dispatch = useDispatch()
+
+    // const handleAddItem = () => {
+    //     dispatch(addItem({val : 'pixxa'}))
+    // }
+
     return (
         <div className="auth-nav">
             <div
@@ -31,6 +46,8 @@ function Header(props) {
             >
                 Home
             </div>
+
+            {/* <button onClick={handleAddItem}>click  {cart}</button> */}
             <div
                 style={{ width: "165px" }}
                 className={` navBtn ${showComp === 2 ? "bg-white text-darkBlue" : "bg-darkBlue text-white"}`}

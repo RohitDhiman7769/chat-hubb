@@ -1,9 +1,9 @@
 import { use, useEffect, useState } from "react";
-import apiService from "../apiService";
+import apiService from "../../apiService";
 import './profile.css'
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import UserProfileView from "./userProfileView";
+import UserProfileView from "../user_profile/userProfileView";
 import.meta.env.VITE_API_KEY
 
 function Profile() {

@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import "./authentication.css";
 import { useLocation } from "react-router-dom";
-import Login from "../../components/loginComp";
-import SignUp from "../../components/sign-up";
+// import Login from "../../components/loginComp";
+import Login from "../../components/login/loginComp";
+import SignUp from "../../components/sign_up/sign-up";
 import ForgetPassword from "../../components/forgetPassowrd";
 import { useNavigate } from "react-router-dom";
 function Authentication() {

@@ -2,11 +2,11 @@ import { useEffect, useState, useRef } from 'react';
 import './newChat.css';
 import './world-chat.css';
 import { addDoc, doc, collection, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase-config';
-import UserProfileView from './userProfileView';
-import { fetchParticularUserProfile } from '../utils/chat-funtion';
+import { db } from '../../firebase-config';
+import UserProfileView from '../user_profile/userProfileView';
+import { fetchParticularUserProfile } from '../../utils/chat-funtion';
 // import Chat from '../../../src/components/chat';
-import Chat from './chat';
+import Chat from '../chat/chat';
 
 function WorldChat() {
     const ChatComponent = useRef()

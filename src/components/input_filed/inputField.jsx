@@ -19,4 +19,4 @@ function Input({ placeholder, type, name, classname, setFieldValue, paramToKnowC
   )
 }
 
-export default Input
+export default Input;

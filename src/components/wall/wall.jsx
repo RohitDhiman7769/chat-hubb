@@ -1,11 +1,11 @@
 import { addDoc, collection, onSnapshot, deleteDoc, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
-import { ReportUserId, fetchParticularUserProfile } from '../utils/chat-funtion';
+import { ReportUserId, fetchParticularUserProfile } from '../../utils/chat-funtion';
 import { useEffect, useState, useRef } from 'react';
-import { db } from '../firebase-config';
-import UserProfileView from './userProfileView';
-import apiService from '../apiService';
+import { db } from '../../firebase-config';
+import UserProfileView from '../user_profile/userProfileView';
+import apiService from '../../apiService';
 import './wall.css';
-import Chat from './chat';
+import Chat from '../chat/chat';
 function Wall() {
     const ChatComponent = useRef()
     const conversationId = [localStorage.getItem('user_id')].sort().join('_')

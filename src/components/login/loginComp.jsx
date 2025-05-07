@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
-import Input from "./inputField"; // Ensure Input is properly imported
+import Input from "../input_filed/inputField";
 import './login.css'
-import GoogleAuth from "./google-auth";
-import apiService from "../apiService";
+import GoogleAuth from "../google-auth";
 import { useNavigate } from "react-router-dom";
+import apiService from "../../apiService";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email format").required("Email is required"),

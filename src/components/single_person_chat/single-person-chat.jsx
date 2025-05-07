@@ -1,13 +1,13 @@
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { useEffect, useState, useRef } from "react";
-import UserProfileView from "./userProfileView";
-import apiService from "../apiService";
+import UserProfileView from "../user_profile/userProfileView";
+import apiService from "../../apiService";
 import React from 'react';
-import { db } from '../firebase-config';
+import { db } from '../../firebase-config';
 import './single-person-chat.css'
 import myImage from '../assets/back.png';
-import Chat from './chat';
-import PopUp from './popUp';
+import Chat from '../chat/chat';
+import PopUp from '../popUp';
 
 
 export default function SinglePersonChat() {

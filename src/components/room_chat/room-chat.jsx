@@ -1,18 +1,18 @@
 
 import { addDoc, collection, onSnapshot, deleteDoc, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { useState, useRef, useEffect, use } from "react";
-import Input from "./inputField";
+import Input from "../input_filed/inputField";
 import * as Yup from "yup";
-import apiService from "../apiService";
+import apiService from "../../apiService";
 import.meta.env.VITE_API_KEY
 import AWS from "aws-sdk";
 import './room-chat.css';
 import './newChat.css';
 import React from 'react';
-import PopUp from "./popUp";
-import { addImageInS3Bucket } from "../utils/chat-funtion";
-import { db } from "../firebase-config";
-import Chat from './chat';
+import PopUp from "../popUp";
+import { addImageInS3Bucket } from "../../utils/chat-funtion";
+import { db } from "../../firebase-config";
+import Chat from '../chat/chat';
 import myImage from '../assets/back.png';
 
 function RoomChat() {

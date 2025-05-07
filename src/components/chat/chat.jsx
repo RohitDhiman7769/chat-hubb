@@ -1,8 +1,8 @@
 import { useEffect, useImperativeHandle, useState, useRef, forwardRef } from "react";
-import { ReportUserId, fetchParticularUserProfile } from '../utils/chat-funtion';
+import { ReportUserId, fetchParticularUserProfile } from '../../utils/chat-funtion';
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
-import { db } from "../firebase-config";
-import { addImageInS3Bucket } from "../utils/chat-funtion";
+import { db } from "../../firebase-config";
+import { addImageInS3Bucket } from "../../utils/chat-funtion";
 const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,paramToKnowComponent }, ref) => {
     const [currentUserId, setCurrentUserId] = useState(localStorage.getItem('user_id'))
     const [newMessage, setNewMessage] = useState("")
@@ -18,6 +18,9 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
     }));
 
 
+    /**
+     * fetch data from firebase
+     */
     const fetchChatFromFireBase = () => {
         const messagesCollectionRef = collection(conversationDocRef, conversationId);
         const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
@@ -27,20 +30,15 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
             const unsubscribe = onSnapshot(q, (snapshot) => {
                 setShowSpinner(false)
                 setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-                // bottomRef.current.scrollIntoView({ behavior: "smooth" });
             });
             return () => unsubscribe();
         }catch(err){
             console.log(err)
         }
-     
-
-
     }
 
     useEffect(() => {
         if (bottomRef.current) {
-        //   bottomRef.current.scrollIntoView({ behavior: "smooth" });
         bottomRef.current.scrollIntoView({ behavior:  "auto" });
         }
       }, [messages]);
@@ -111,6 +109,10 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,para
         }
     }
 
+    /**
+     * 
+     * @param {*} e get seleected image and upload into S3 buckete and upload URL on firebase
+     */
     const getImages = async (e) => {
         for (let val of e.target.files) {
             const image = await addImageInS3Bucket(val)

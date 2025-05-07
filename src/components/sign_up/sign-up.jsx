@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup"; 
-import Input from "./inputField"; 
+import Input from "../input_filed/inputField"; 
 import './signUp.css'
-import GoogleAuth from "./google-auth";
+import GoogleAuth from "../google-auth";
 import AWS from "aws-sdk";
 import.meta.env.VITE_API_KEY
-import { addImageInS3Bucket } from "../utils/chat-funtion";
-import apiService from "../apiService";
+import { addImageInS3Bucket } from "../../utils/chat-funtion";
+import apiService from "../../apiService";
 import { useNavigate } from "react-router-dom";
 
 

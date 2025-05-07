@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
-import Input from "./inputField"; // Ensure Input is properly imported
-import './signUp.css'
+// import Input from "./inputField"; // Ensure Input is properly imported
+// import Input 
+import Input from "./input_filed/inputField";
+// import './signUp.css'
+import './sign_up/signUp.css'
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email format").required("Email is required"),
