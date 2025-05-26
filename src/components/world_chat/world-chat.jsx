@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import './newChat.css';
+// import './newChat.css';
+import '../newChat.css';
 import './world-chat.css';
 import { addDoc, doc, collection, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase-config';

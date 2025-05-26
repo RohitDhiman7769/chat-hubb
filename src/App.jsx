@@ -5,8 +5,8 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Header from './components/header/Header';
 import { Provider } from 'react-redux';
 import appStore from './utils/appStore';
-
-const SinglePersonChat = lazy(() => import('./components/single_person_chat/single-person-chat'))
+import SinglePersonChat from './components/single_person_chat/single-person-chat';
+// const SinglePersonChat = lazy(() => import('./components/single_person_chat/single-person-chat'))
 const RoomChat = lazy(() => import('./components/room_chat/room-chat'))
 const Wall = lazy(() => import('./components/wall/wall'))
 const WorldChat = lazy(() => import('./components/world_chat/world-chat'))
@@ -37,7 +37,7 @@ function App() {
       children: [
         {
           path: "/home",
-          element: <Suspense> <SinglePersonChat /></Suspense>,
+          element: <SinglePersonChat />,
         },
         {
           path: "/room",

@@ -18,11 +18,3 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 export const provider = new GoogleAuthProvider();
 export const db = new getFirestore(app);
-// console.log(db.collection('chat-hubb'))
-// export const val = db.collection('chat-hubb')
-// const conversationRef = collection(db, 'chat-hubb/conversation/123/messages')
-// console.log(conversationRef)
-
-        // const documentRef = doc(db,'chat-hubb/conversation')
-        // console.log(documentRef)
-        // await conversationRef.set(conversationData)

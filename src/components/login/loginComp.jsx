@@ -33,6 +33,7 @@ function Login() {
                 localStorage.setItem('email', response.data.user_data.email)
                 localStorage.setItem('profile_img', response.data.user_data.profile_img)
                 localStorage.setItem('initial_login', response.data.user_data.initial_login)
+                console.log(response.data.user_data)
                 navigate("/home")
             }
         }

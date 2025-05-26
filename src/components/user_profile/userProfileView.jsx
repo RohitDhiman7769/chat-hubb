@@ -1,4 +1,4 @@
-import myImage from '../assets/back.png';
+import myImage from '../../assets/back.png';
 import { useEffect, useState } from 'react';
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { db } from '../../firebase-config';

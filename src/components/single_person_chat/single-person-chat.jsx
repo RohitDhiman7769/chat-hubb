@@ -5,10 +5,12 @@ import apiService from "../../apiService";
 import React from 'react';
 import { db } from '../../firebase-config';
 import './single-person-chat.css'
-import myImage from '../assets/back.png';
+// import myImage from '../assets/back.png';
+import myImage from '../../assets/back.png';
+import { useFormik } from "formik";
 import Chat from '../chat/chat';
 import PopUp from '../popUp';
-
+import '../newChat.css';
 
 export default function SinglePersonChat() {
     const modalOpenBtn = useRef();

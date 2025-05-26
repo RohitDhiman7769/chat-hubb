@@ -7,13 +7,13 @@ import apiService from "../../apiService";
 import.meta.env.VITE_API_KEY
 import AWS from "aws-sdk";
 import './room-chat.css';
-import './newChat.css';
+import '../newChat.css';
 import React from 'react';
 import PopUp from "../popUp";
 import { addImageInS3Bucket } from "../../utils/chat-funtion";
 import { db } from "../../firebase-config";
 import Chat from '../chat/chat';
-import myImage from '../assets/back.png';
+import myImage from '../../assets/back.png';
 
 function RoomChat() {
     const modalOpenBtn = useRef();
