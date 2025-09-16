@@ -1,7 +1,9 @@
 import axios from "axios";
 
 // const API_BASE_URL = import.meta.env.VITE_BACKEND_URL; // Replace with your API URL
-const API_BASE_URL ='https://chat-hub-backend-3njw.onrender.com/api/users/'
+// const API_BASE_URL ='https://chat-hub-backend-3njw.onrender.com/api/users/'
+const API_BASE_URL ='http://localhost:3000/api/users/'
+// const API_BASE_URL ='http://localhost:3000'
 
 // Create an Axios instance for default settings
 const apiClient = axios.create({

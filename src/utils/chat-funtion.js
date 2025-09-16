@@ -43,7 +43,7 @@ export const addImageInS3Bucket = async (data) => {
         });
 
         const s3 = new AWS.S3({
-            params: { Bucket: 'rohit-dhiman-buckt' },
+            params: { Bucket: import.meta.env.BUCKET_NAME },
             region: 'us-east-1',
         });
 
@@ -53,12 +53,14 @@ export const addImageInS3Bucket = async (data) => {
             Key: data.name,
             Body: data,
         };
+        console.log(params)
 
         try {
             const upload = s3.putObject(params)
                 .on("httpUploadProgress", (evt) => {
                 })
                 .promise();
+                console.log(upload)
             await upload;
             return  `https://rohit-dhiman-buckt.s3.eu-north-1.amazonaws.com/${params.Key}`;
         } catch (err) {

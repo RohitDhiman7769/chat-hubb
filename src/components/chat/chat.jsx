@@ -3,280 +3,401 @@ import { ReportUserId, fetchParticularUserProfile } from '../../utils/chat-funti
 import { addDoc, collection, onSnapshot, query, serverTimestamp, orderBy, doc } from 'firebase/firestore';
 import { db } from "../../firebase-config";
 import { addImageInS3Bucket } from "../../utils/chat-funtion";
-const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef,paramToKnowComponent }, ref) => {
-    const [currentUserId, setCurrentUserId] = useState(localStorage.getItem('user_id'))
-    const [newMessage, setNewMessage] = useState("")
-    const [messages, setMessages] = useState([])
-    const [showSpinner, setShowSpinner] = useState(true)
-    const bottomRef = useRef(null);
+import './chat.css';
+
+const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, paramToKnowComponent }, ref) => {
+  const [currentUserId, setCurrentUserId] = useState(localStorage.getItem('user_id'))
+  const [newMessage, setNewMessage] = useState("")
+  const [messages, setMessages] = useState([])
+  const [showSpinner, setShowSpinner] = useState(true)
+  const bottomRef = useRef(null);
 
 
-    useImperativeHandle(ref, () => ({
-        callChatFunct: () => {
-            fetchChatFromFireBase()
-        },
-    }));
+  useImperativeHandle(ref, () => ({
+    callChatFunct: () => {
+      fetchChatFromFireBase()
+    },
+  }));
 
 
-    /**
-     * fetch data from firebase
-     */
-    const fetchChatFromFireBase = () => {
-        const messagesCollectionRef = collection(conversationDocRef, conversationId);
-        const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
+  /**
+   * fetch data from firebase
+   */
+  const fetchChatFromFireBase = () => {
+    const messagesCollectionRef = collection(conversationDocRef, conversationId);
+    const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
 
-        // Real-time listener for messages
-        try{
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                setShowSpinner(false)
-                setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-            });
-            return () => unsubscribe();
-        }catch(err){
-            console.log(err)
-        }
+    // Real-time listener for messages
+    try {
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        setShowSpinner(false)
+        setMessages(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      });
+      return () => unsubscribe();
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages]);
+
+
+  /**
+   * sent message
+   */
+  const sendMessage = async () => {
+    const conversationData = {
+      text: newMessage,
+      type: 'text',
+      name: localStorage.getItem('email').split('@')[0],
+      createdAt: serverTimestamp(),
+      user: localStorage.getItem('user_id'),
+      image: localStorage.getItem('profile_img'),
+      conversationId: conversationId
     }
 
-    useEffect(() => {
-        if (bottomRef.current) {
-        bottomRef.current.scrollIntoView({ behavior:  "auto" });
-        }
-      }, [messages]);
+    const messagesCollectionRef = collection(conversationDocRef, conversationId);
+    await addDoc(messagesCollectionRef, conversationData)
+    setNewMessage('')
+  }
 
-      
-    /**
-     * sent message
-     */
-    const sendMessage = async () => {
-        const conversationData = {
-            text: newMessage,
-            type: 'text',
-            name: localStorage.getItem('email').split('@')[0],
-            createdAt: serverTimestamp(),
-            user: localStorage.getItem('user_id'),
-            image: localStorage.getItem('profile_img'),
-            conversationId: conversationId
-        }
-
-        const messagesCollectionRef = collection(conversationDocRef, conversationId);
-        await addDoc(messagesCollectionRef, conversationData)
-        setNewMessage('')
+  /**
+   * 
+   * @param {*} firebaseTimestamp get date format from firebase 
+   * @returns update date format data
+   */
+  const formatTimestamp = (firebaseTimestamp, val) => {
+    if (!firebaseTimestamp) return "";
+    const date = new Date(firebaseTimestamp.seconds * 1000);
+    if (val == 1) {
+      return date.toLocaleString().split(',')[0]
     }
-
-    /**
-     * 
-     * @param {*} firebaseTimestamp get date format from firebase 
-     * @returns update date format data
-     */
-    const formatTimestamp = (firebaseTimestamp, val) => {
-        if (!firebaseTimestamp) return "";
-        const date = new Date(firebaseTimestamp.seconds * 1000);
-        if (val == 1) {
-            return date.toLocaleString().split(',')[0]
-        }
-        return date.toLocaleString().split(',')[1]
-    };
+    return date.toLocaleString().split(',')[1]
+  };
 
 
-    /**
-    * 
-    * @param {*} id get user id for report  
-    */
-    const sendUserIdForReport = async (id) => {
-        ReportUserId(id)
+  /**
+  * 
+  * @param {*} id get user id for report  
+  */
+  const sendUserIdForReport = async (id) => {
+    ReportUserId(id)
+  }
+
+
+  /**
+   * 
+   * @param {*} data fetch user profile for view
+   */
+  const getUserId = async (data) => {
+    appendUserId(data.user)
+  }
+
+
+  /**
+  * 
+  * @param {*} id get message id to delete specific user message on firebase 
+  */
+  const deleteWallMessage = async (id) => {
+    try {
+      const messageDocRef = doc(conversationDocRef, conversationId, id);
+      await deleteDoc(messageDocRef);
+    } catch (err) {
+      console.log(err)
     }
+  }
 
-
-    /**
-     * 
-     * @param {*} data fetch user profile for view
-     */
-    const getUserId = async (data) => {
-        appendUserId(data.user)
+  /**
+   * 
+   * @param {*} e get seleected image and upload into S3 buckete and upload URL on firebase
+   */
+  const getImages = async (e) => {
+    for (let val of e.target.files) {
+      const image = await addImageInS3Bucket(val)
+      const conversationData = {
+        text: image,
+        type: 'file',
+        name: localStorage.getItem('email').split('@')[0],
+        createdAt: serverTimestamp(),
+        user: localStorage.getItem('user_id'),
+        image: localStorage.getItem('profile_img'),
+        conversationId: conversationId
+      }
+      console.log(conversationData)
+      const messagesCollectionRef = collection(conversationDocRef, conversationId);
+      await addDoc(messagesCollectionRef, conversationData)
     }
+  }
+  return (
+    // <>
 
+    //   {showSpinner ? (
+    //     <div className="flex justify-center items-center min-h-[200px]">
+    //       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+    //     </div>
+    //   ) : (
+    //     <>
+    //       <div className="flex flex-col gap-2 p-4 overflow-y-auto h-[70vh] bg-gray-50">
+    //         {messages?.length > 0 ? (
+    //           messages?.map((mes, index) => (
+    //             <div key={mes.id}>
+    //               {(formatTimestamp(messages[index - 1]?.createdAt, 1) !== formatTimestamp(mes.createdAt, 1)) && (
+    //                 <p className="text-center text-xs text-gray-400 my-2">{formatTimestamp(mes.createdAt, 1)}</p>
+    //               )}
+    //               {mes.user == currentUserId ? (
+    //                 <div className="flex justify-end items-end gap-2 mb-2">
+    //                   <div className="relative">
+    //                     <button className="text-gray-500 hover:text-gray-700 px-2 py-1 rounded" type="button">
+    //                       <i className="fa-solid fa-ellipsis-vertical"></i>
+    //                     </button>
+    //                     {/* Dropdown */}
+    //                     <ul className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10">
+    //                       <li>
+    //                         <button onClick={() => deleteWallMessage(mes.id)} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+    //                           <img src="assets/images/customer-contact.svg" alt="" className="w-4 h-4" />
+    //                           Delete
+    //                         </button>
+    //                       </li>
+    //                       <li>
+    //                         <button onClick={() => sendUserIdForReport(mes.user)} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+    //                           <img src="assets/images/delete.svg" alt="" className="w-4 h-4" />
+    //                           Report user
+    //                         </button>
+    //                       </li>
+    //                     </ul>
+    //                   </div>
+    //                   <div className="flex flex-col items-end" ref={bottomRef}>
+    //                     {mes.type === 'file' ? (
+    //                       <div className="rounded border border-gray-300 overflow-hidden mb-1">
+    //                         <img src={mes.text} className="h-36 w-36 object-cover" alt="Attachment" />
+    //                       </div>
+    //                     ) : (
+    //                       <div className="bg-blue-500 text-white px-4 py-2 rounded-lg max-w-xs break-words">{mes.text}</div>
+    //                     )}
+    //                     <span className="text-xs text-gray-400 mt-1">{formatTimestamp(mes.createdAt)}</span>
+    //                   </div>
+    //                   <img className="w-2 h-2 rounded-full border border-gray-300" src={mes.image} alt="Avatar" />
+    //                 </div>
+    //               ) : (
+    //                 <div className="flex justify-start items-end gap-2 mb-2">
+    //                   <img className="w-2 h-2 rounded-full border border-gray-300 cursor-pointer" src={mes.image} alt="Avatar" onClick={() => getUserId(mes)} />
+    //                   <div className="flex flex-col items-start">
+    //                     <p className="font-bold text-sm">{mes.name}</p>
+    //                     {mes.type === 'file' ? (
+    //                       <div className="rounded border border-gray-300 overflow-hidden mb-1">
+    //                         <img src={mes.text} className="h-16 w-16 object-cover" alt="Attachment" />
+    //                       </div>
+    //                     ) : (
+    //                       <div className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg max-w-xs break-words">{mes.text}</div>
+    //                     )}
+    //                     <span className="text-xs text-gray-400 mt-1">{formatTimestamp(mes.createdAt, 2)}</span>
+    //                   </div>
+    //                   <div className="relative">
+    //                     <button className="text-gray-500 hover:text-gray-700 px-2 py-1 rounded" type="button">
+    //                       <i className="fa-solid fa-ellipsis-vertical"></i>
+    //                     </button>
+    //                     {/* Dropdown */}
+    //                     <ul className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10">
+    //                       <li>
+    //                         <button onClick={() => sendUserIdForReport(mes.user)} className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
+    //                           <img src="assets/images/delete.svg" alt="" className="w-4 h-4" />
+    //                           Report user
+    //                         </button>
+    //                       </li>
+    //                     </ul>
+    //                   </div>
+    //                 </div>
+    //               )}
+    //             </div>
+    //           ))
+    //         ) : (
+    //           <div className="flex justify-center items-center h-full">
+    //             <h2 className="text-lg text-gray-400">No Wall message yet!</h2>
+    //           </div>
+    //         )}
+    //       </div>
+    //       {paramToKnowComponent != 2 && (
+    //         <div className="w-full bg-white border-t px-4 py-2 flex items-center gap-2">
+    //           <textarea
+    //             value={newMessage}
+    //             onChange={(e) => setNewMessage(e.target.value)}
+    //             className="flex-1 resize-none border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+    //             placeholder="Skriv meddelande..."
+    //             rows="1"
+    //           />
+    //           <label htmlFor="file_input" className="cursor-pointer text-gray-500 hover:text-blue-500">
+    //             <i className="fa-solid fa-paperclip"></i>
+    //           </label>
+    //           <input type="file" id="file_input" onChange={getImages} hidden multiple accept="image/*,video/*" />
+    //           <button className="text-blue-500 hover:text-blue-700 text-xl" onClick={sendMessage}>
+    //             <i className="fa-solid fa-paper-plane"></i>
+    //           </button>
+    //         </div>
+    //       )}
+    //     </>
+    //   )}
 
-    /**
-    * 
-    * @param {*} id get message id to delete specific user message on firebase 
-    */
-    const deleteWallMessage = async (id) => {
-        try {
-            const messageDocRef = doc(conversationDocRef, conversationId, id);
-            await deleteDoc(messageDocRef);
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    /**
-     * 
-     * @param {*} e get seleected image and upload into S3 buckete and upload URL on firebase
-     */
-    const getImages = async (e) => {
-        for (let val of e.target.files) {
-            const image = await addImageInS3Bucket(val)
-            const conversationData = {
-                text: image,
-                type: 'file',
-                name: localStorage.getItem('email').split('@')[0],
-                createdAt: serverTimestamp(),
-                user: localStorage.getItem('user_id'),
-                image: localStorage.getItem('profile_img'),
-                conversationId: conversationId
-            }
-            console.log(conversationData)
-            const messagesCollectionRef = collection(conversationDocRef, conversationId);
-            await addDoc(messagesCollectionRef, conversationData)
-        }
-    }
-    return (
+    // </>
+   <>
+      {showSpinner ? (
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      ) : (
         <>
-            {showSpinner ?
-                <>
-                    <div className="d-flex justify-content-center main_spinner_box">
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
+          <div className="chat-messages">
+            {messages?.length > 0 ? (
+              messages?.map((mes, index) => (
+                <div key={mes.id}>
+                  {formatTimestamp(messages[index - 1]?.createdAt, 1) !==
+                    formatTimestamp(mes.createdAt, 1) && (
+                    <p className="chat-date">{formatTimestamp(mes.createdAt, 1)}</p>
+                  )}
 
-                </>
-                :
-                <>
-  
-                    <div className="chat_body " >
-                        {messages?.length > 0 ? (
-                            messages?.map((mes, index) => (
-                                <>
-                                    {(formatTimestamp(messages[index - 1]?.createdAt, 1) != formatTimestamp(mes.createdAt, 1)) && <p className="m-0 date_body">{formatTimestamp(mes.createdAt, 1)}</p>}
-                                    {mes.user == currentUserId
-                                        ?
-                                        <div  key={mes.id} className="right_chat chat_main d-flex justify-content-end align-items-end">
-                                            <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i className="fa-solid fa-ellipsis-vertical"></i>
-                                            </a>
-                                            <ul className="dropdown-menu">
-                                                <li onClick={() => deleteWallMessage(mes.id)}>
-                                                    <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
-                                                        Delete</a>
-                                                </li>
-                                                <li onClick={() => sendUserIdForReport(mes.user)}>
-                                                    <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#delete_chat">
-                                                        <img src="assets/images/delete.svg" alt="" />
-                                                        Report user</a>
-                                                </li>
+                  {mes.user === currentUserId ? (
+                    <div className="chat-message right">
+                      <div className="dropdown">
+                        <button className="dropdown-btn" type="button">
+                          <i className="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li>
+                            <button
+                              onClick={() => deleteWallMessage(mes.id)}
+                              className="dropdown-item"
+                            >
+                              <img
+                                src="assets/images/customer-contact.svg"
+                                alt=""
+                                className="icon"
+                              />
+                              Delete
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => sendUserIdForReport(mes.user)}
+                              className="dropdown-item"
+                            >
+                              <img
+                                src="assets/images/delete.svg"
+                                alt=""
+                                className="icon"
+                              />
+                              Report user
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
 
-                                            </ul>
-                                            <div className="chat_inner d-flex justify-content-start align-items-center" ref={bottomRef}>
-                                                {mes.type == 'file' ?
-                                                    <>
-                                                        <div className="image_box">
-                                                            <img src={mes.text} style={{ height: '150px', width: '150px', border: '1px solid black', borderRadius: '1px !important' }} alt="Avatar" />
-                                                        </div>
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <div className="messsage">
-                                                            {mes.text}
-                                                        </div>
-                                                    </>
-                                                }
-
-                                                <span className="time">{formatTimestamp(mes.createdAt)}</span>
-                                            </div>
-                                            <div className="image_box">
-                                                <img style={{ border: '1px solid black', borderRadius: '100px' }} src={mes.image} alt="Avatar" />
-                                            </div>
-                                        </div>
-                                        :
-                                        <div  key={mes.id} className="left_chat chat_main d-flex justify-content-start align-items-end">
-                                            <div className="image_box" style={{ cursor: 'pointer' }} onClick={() => getUserId(mes)}>
-                                                <img style={{ border: '1px solid black', borderRadius: '100px' }} src={mes.image} alt="Avatar" />
-                                            </div>
-                                            <div className="chat_inner d-flex justify-content-start align-items-center">
-                                                <div className="messsage" ref={bottomRef}>
-                                                    <p style={{ fontWeight: '700' }}>
-                                                        {mes.name}
-                                                    </p>
-
-                                                    {mes.type == 'file' ?
-                                                        <>
-                                                            <div className="image_box">
-                                                                <img src={mes.text} style={{ height: '150px', width: '150px', border: '1px solid black', borderRadius: '1px' }} alt="Avatar" />
-                                                            </div>
-                                                        </>
-                                                        :
-                                                        <>
-                                                            <div className="messsage">
-                                                                {mes.text}
-                                                            </div>
-                                                        </>
-                                                    }
-                                                    <br />
-                                                    <span className="time">{formatTimestamp(mes.createdAt, 2)}</span>
-
-                                                </div>
-
-                                            </div>
-                                            <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i className="fa-solid fa-ellipsis-vertical"></i>
-                                            </a>
-                                            <ul className="dropdown-menu">
-                                                <li onClick={() => sendUserIdForReport(mes.user)}>
-                                                    <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#delete_chat">
-                                                        <img src="assets/images/delete.svg" alt="" />
-                                                        Report user</a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                    }
-                                </>
-                            ))
+                      <div className="message-content" ref={bottomRef}>
+                        {mes.type === "file" ? (
+                          <div className="file-message">
+                            <img
+                              src={mes.text}
+                              className="file-preview"
+                              alt="Attachment"
+                            />
+                          </div>
                         ) : (
-                            <>
-                                <div className="no_data" style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <h2>No Wall message yet!</h2>
-                                </div>
-                            </>
+                          <div className="bubble blue">{mes.text}</div>
                         )}
+                        <span className="timestamp">
+                          {formatTimestamp(mes.createdAt)}
+                        </span>
+                      </div>
 
-
+                      <img className="avatar" src={mes.image} alt="Avatar" />
                     </div>
+                  ) : (
+                    <div className="chat-message left">
+                      <img
+                        className="avatar"
+                        src={mes.image}
+                        alt="Avatar"
+                        onClick={() => getUserId(mes)}
+                      />
+                      <div className="message-content">
+                        <p className="username">{mes.name}</p>
+                        {mes.type === "file" ? (
+                          <div className="file-message small">
+                            <img
+                              src={mes.text}
+                              className="file-preview small"
+                              alt="Attachment"
+                            />
+                          </div>
+                        ) : (
+                          <div className="bubble gray">{mes.text}</div>
+                        )}
+                        <span className="timestamp">
+                          {formatTimestamp(mes.createdAt, 2)}
+                        </span>
+                      </div>
 
+                      <div className="dropdown">
+                        <button className="dropdown-btn" type="button">
+                          <i className="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li>
+                            <button
+                              onClick={() => sendUserIdForReport(mes.user)}
+                              className="dropdown-item"
+                            >
+                              <img
+                                src="assets/images/delete.svg"
+                                alt=""
+                                className="icon"
+                              />
+                              Report user
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="no-messages">
+                <h2>No Wall message yet!</h2>
+              </div>
+            )}
+          </div>
 
-
-
-                </>
-
-            }
-            {paramToKnowComponent != 2 && 
-             <div className="main_chat_send position-relative" >
-             <div className="chat_send_box position-relative">
-                 <div className="input_box">
-                     <textarea type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className="inPut_send" placeholder="Skriv meddelande..." rows="1"></textarea>
-                 </div>
-                 <div className="send_btns">
-                     <div className="file_open">
-                         <label htmlFor="file_input">
-                             <i className="fa-solid fa-paperclip"></i>
-                         </label>
-                         <input type="file" id="file_input" onChange={(e) => getImages(e)} hidden multiple accept="image/*,video/*" />
-                     </div>
-                     <button className="send_chat" onClick={sendMessage}>
-                         <i className="fa-solid fa-paper-plane"></i>
-                     </button>
-                 </div>
-             </div>
-         </div>
-            }
-           
+          {paramToKnowComponent !== 2 && (
+            <div className="chat-input">
+              <textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="input-box"
+                placeholder="Skriv meddelande..."
+                rows="1"
+              />
+              <label htmlFor="file_input" className="file-label">
+                <i className="fa-solid fa-paperclip"></i>
+              </label>
+              <input
+                type="file"
+                id="file_input"
+                onChange={getImages}
+                hidden
+                multiple
+                accept="image/*,video/*"
+              />
+              <button className="send-btn" onClick={sendMessage}>
+                <i className="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          )}
         </>
-    );
+      )}
+    </>
+  );
 })
 export default Chat;

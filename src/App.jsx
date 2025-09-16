@@ -1,5 +1,5 @@
 import './App.css'
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import Authenctication from './pages/auth/authentication'
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Header from './components/header/Header';
@@ -30,6 +30,7 @@ const AppLayout = () => {
 
 function App() {
   const isLoggedIn = localStorage.getItem('user_id')
+  console.log("isLoggedIn", isLoggedIn)
   const router = createBrowserRouter([
     {
       path: "/",
@@ -70,6 +71,9 @@ function App() {
       element: <Authenctication />,
     },
   ]);
+
+
+
   return (
     <RouterProvider router={router} />
   )

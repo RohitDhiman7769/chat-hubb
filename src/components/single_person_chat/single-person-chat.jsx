@@ -79,9 +79,11 @@ export default function SinglePersonChat() {
      */
     const fetchData = async (checkInitialLogin) => {
         try {
+            fetchAllUser()
             if (checkInitialLogin == 1) {
                 modalOpenBtn.current.click()
-                fetchAllUser()
+                localStorage.setItem('initial_login', 2)
+
             } else {
                 const response = await apiService.get(`/added-users-list?userId=${user}`);
                 setShowSpinner(false)
@@ -150,7 +152,7 @@ export default function SinglePersonChat() {
 
     if (showUserChat == 1) {
         return (
-            <> 
+            <>
                 <section className="chat_main_section">
                     <div className="container-fluid">
                         <div className="container">
@@ -158,49 +160,41 @@ export default function SinglePersonChat() {
                                 <div className="row form_row">
                                     <div className="col-lg-12 fom_data ">
                                         <div className="chat_container position-relative">
-                                            <h2 style={{ paddingTop: '20px', paddingLeft: '25px' }}>Chats</h2>
-                                            <div className="chat_person_head  ">
 
-                                                {showSpinner ?
-                                                    <>
-                                                        <div className="d-flex justify-content-center main_spinner_box">
-                                                            <div className="spinner-border" role="status">
-                                                                <span className="visually-hidden">Loading...</span>
+                                            <div >
+                                                <div className=" d-flex justify-content-between align-items-center">
+
+                                                    <h2 style={{ paddingTop: '20px', paddingLeft: '25px' }}>Chats</h2>
+                                                    <button onClick={() => { modalOpenBtn.current.click() }}>Add Friend</button>
+                                                </div>
+
+
+                                                {usersList.length > 0 ?
+                                                    usersList.map((user) => {
+                                                        return (
+                                                            <div onClick={() => showChat(user)} key={user._id} style={{ margin: '2px', border: '1px solid black' }} className="person_status_box d-flex justify-content-start align-items-center ">
+                                                                <div className="image_box">
+                                                                    <img src={user.profile_img} alt="" />
+                                                                </div>
+                                                                <div className="person_status d-block">
+                                                                    <h4 className="m-o person_name_head">
+                                                                        {user.email.split('@')[0]}
+                                                                    </h4>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </>
+                                                        )
+                                                    })
                                                     :
-                                                    <>
-                                                        {usersList.length > 0 ?
-                                                            usersList.map((user) => {
-                                                                return (
-                                                                    <div onClick={() => showChat(user)} key={user._id} style={{ margin: '2px', border: '1px solid black' }} className="person_status_box d-flex justify-content-start align-items-center ">
-                                                                        <div className="image_box">
-                                                                            <img src={user.profile_img} alt="" />
-                                                                        </div>
-                                                                        <div className="person_status d-block">
-                                                                            <h4 className="m-o person_name_head">
-                                                                                {user.email.split('@')[0]}
-                                                                            </h4>
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                            :
-                                                            <>
-                                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                                    <p>No chat exist</p>
-
-
-                                                                </div>
-                                                                <div>
-                                                                    <span style={{ fontWeight: 700 }}>Note:</span> <span>First add friend from world chat or Search user name</span>
-                                                                </div>
-                                                            </>
-                                                        }
-                                                    </>
-
+                                                    <div>
+                                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                            <p>No chat exist</p>
+                                                        </div>
+                                                        <div>
+                                                            <span style={{ fontWeight: 700 }}>Note:</span> <span>First add friend from world chat or click to add friend button for add any user or search user name</span>
+                                                        </div>
+                                                    </div>
                                                 }
+
 
                                             </div>
                                         </div>
@@ -209,9 +203,9 @@ export default function SinglePersonChat() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section >
 
-                <PopUp listOfUsersToShow={listOfUsers} inputRef={inputRef} fetchUserList={updateItems} getAllUser={fetchAllUser} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} />
+                <PopUp listOfUsersToShow={listOfUsers} setListOfUsers={setListOfUsers} inputRef={inputRef} fetchUserList={updateItems} getAllUser={fetchAllUser} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} />
 
             </>
 

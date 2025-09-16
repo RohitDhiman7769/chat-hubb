@@ -3,7 +3,7 @@ import Input from "./input_filed/inputField";
 import apiService from "../apiService";
 import React from 'react';
 
-export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUser, fetchUserList, listOfUsersToShow }) {
+export default function PopUp({ refOpenModal,setListOfUsers, inputRef, refCloseModal, getAllUser, fetchUserList, listOfUsersToShow }) {
     const [selectedUserForFriend, setSelectedUserForFriend] = useState([])
     /**
          * if user skip popup on click this function will be update into database
@@ -42,7 +42,8 @@ export default function PopUp({ refOpenModal, inputRef, refCloseModal, getAllUse
     const searchUser = async (value) => {
         console.log("Received from child:", value);
         const response = await apiService.get(`/search-user?chr=${value}`);
-        // setListOfUsers(response.data.data)
+        console.log(response)
+        setListOfUsers(response.data.data)
     };
 
 

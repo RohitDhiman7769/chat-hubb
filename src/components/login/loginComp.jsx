@@ -21,21 +21,31 @@ function Login() {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             setShowSpinner(true)
-            const response = await apiService.post("/log-in", {
-                password: values.password,
-                email: values.email,
-            });
-            if (response.data.code == 200) {
+            try {
+                const response = await apiService.post("/log-in", {
+                    password: values.password,
+                    email: values.email,
+                });
+                if (response.data.code == 200) {
+                    setShowSpinner(false)
+                    alert(response.data.message)
+                    localStorage.setItem('auth_token', response.data.access_token)
+                    localStorage.setItem('user_id', response.data.user_data._id)
+                    localStorage.setItem('email', response.data.user_data.email)
+                    localStorage.setItem('profile_img', response.data.user_data.profile_img)
+                    localStorage.setItem('initial_login', response.data.user_data.initial_login)
+                    console.log(response.data.user_data)
+                    navigate("/home");
+                }
+            } catch (error) {
                 setShowSpinner(false)
-                alert(response.data.message)
-                localStorage.setItem('auth_token', response.data.access_token)
-                localStorage.setItem('user_id', response.data.user_data._id)
-                localStorage.setItem('email', response.data.user_data.email)
-                localStorage.setItem('profile_img', response.data.user_data.profile_img)
-                localStorage.setItem('initial_login', response.data.user_data.initial_login)
-                console.log(response.data.user_data)
-                navigate("/home")
+                console.log(error.response.data.error)
+                alert(error.response.data.error)
             }
+
+            //   else {
+
+            //     }
         }
     });
 
@@ -90,3 +100,9 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+

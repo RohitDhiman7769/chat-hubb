@@ -27,6 +27,7 @@ function SignUp({ updateCompValue }) {
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             const image = await addImageInS3Bucket(values.profilePicture)
+            console.log(image)
             try {
                 setShowSpinner(true)
                 const response = await apiService.post("/sign-up", {
