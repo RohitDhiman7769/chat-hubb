@@ -22,6 +22,9 @@ function SignUp({ updateCompValue }) {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
 
+    /**
+     * Formik form handling and validation
+     */
     const formik = useFormik({
         initialValues: { email: "", password: "", confirmPassword: "", profilePicture: '' },
         validationSchema: validationSchema,

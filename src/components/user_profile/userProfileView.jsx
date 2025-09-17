@@ -16,11 +16,8 @@ function UserProfileView({ userData, setFieldValue }) {
     useEffect(() => {
 
         if (!conversationId) return;
-        // Reference to messages in the conversation subcollection
         const conversationDocRef = doc(db, "chat-hubb", "wall");
         const messagesCollectionRef = collection(conversationDocRef, conversationId);
-
-        // Query messages ordered by timestamp (oldest to newest)
         const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
 
         // Real-time listener for messages
@@ -34,6 +31,9 @@ function UserProfileView({ userData, setFieldValue }) {
     useEffect(() => {
     }, [messages]);
 
+    /**
+     * send message to firebase database
+     */
     const sendMessage = async () => {
         const conversationData = {
             text: newMessage,
@@ -51,10 +51,15 @@ function UserProfileView({ userData, setFieldValue }) {
     }
 
 
-
+    /**
+     * 
+     * @param {*} firebaseTimestamp 
+     * @param {*} val 
+     * @returns 
+     */
     const formatTimestamp = (firebaseTimestamp, val) => {
         if (!firebaseTimestamp) return "";
-        const date = new Date(firebaseTimestamp.seconds * 1000); // Convert seconds to milliseconds
+        const date = new Date(firebaseTimestamp.seconds * 1000);
         console.log(val)
         if (val == 1) {
             console.log(checkData)
@@ -70,25 +75,27 @@ function UserProfileView({ userData, setFieldValue }) {
                 return checkData
             }
         } else {
-            return date.toLocaleString(); // Returns "MM/DD/YYYY, HH:MM:SS AM/PM"
+            return date.toLocaleString();
 
         }
     };
 
+    /**
+     *  
+     */
     const goBack = () => {
 
         setFieldValue(true)
     }
 
-    const sendaddFriendRequest =async() => {
-
-        console.log('work')
+/**
+ * send friend request to particular user
+ */
+    const sendaddFriendRequest = async () => {
         const response = await apiService.post(`/add-friend`, {
             user_id: localStorage.getItem('user_id'),
             arrayOfAddedUsersId: [userData._id]
         });
-
-        console.log(response)
     }
 
     return (

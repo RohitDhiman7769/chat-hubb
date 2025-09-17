@@ -50,23 +50,24 @@ function RoomChat() {
 
 
     useEffect(() => {
-        console.log(currentOpenedRoomDetails);
+        // console.log(currentOpenedRoomDetails);
     }, [currentOpenedRoomDetails])
 
     useEffect(() => {
-        console.log(listOfUsers);
+        // console.log(listOfUsers);
     }, [listOfUsers])
 
     useEffect(() => {
-        console.log(conversationId);
+        // console.log(conversationId);
         if (ChatComponent.current) {
             ChatComponent.current.callChatFunct()
 
         }
     }, [conversationId])
 
-    // ChatComponent
-
+    /**
+     * fetch user room list from database
+     */
     const fetchUserFriends = async () => {
         try {
             const getRoomList = await apiService.get(`/room-list?userId=${currentUserId}`);
@@ -116,7 +117,9 @@ function RoomChat() {
         setConversationId(data?.room_id)
     }
 
-
+    /**
+     * fetch user list based on room type
+     */
     const getUserList = async () => {
         console.log(roomType)
         if (roomType == 2) {
@@ -140,9 +143,9 @@ function RoomChat() {
         modalOpenBtn.current.click()
     }
 
-
-
-
+    /**
+     * open group info component
+     */
     const openGroupInfo = () => {
         setShowChatComp(3)
     }

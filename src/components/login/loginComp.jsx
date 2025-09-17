@@ -16,6 +16,9 @@ function Login() {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
 
+    /**
+     * Formik form handling and validation
+     */
     const formik = useFormik({
         initialValues: { email: "", password: "" },
         validationSchema: validationSchema,

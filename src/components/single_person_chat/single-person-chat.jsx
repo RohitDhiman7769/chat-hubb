@@ -64,6 +64,10 @@ export default function SinglePersonChat() {
         }
     };
 
+    /**
+     * 
+     * @returns split user name from email
+     */
     const getUserName = () => {
         console.log('emial', currentChatUserData?.email)
         if (currentChatUserData?.email) {
@@ -82,8 +86,12 @@ export default function SinglePersonChat() {
         inputRef.current.value = ''
     }
 
+    /**
+     * 
+     * @param {*} data 
+     */
     const showChat = (data) => {
-        console.log(data)
+        // console.log(data)
         setShowUserChat(2)
         setCurrentChatUserData(data)
         const conversationId = [data._id, localStorage.getItem('user_id'),].sort().join('_');
@@ -108,12 +116,17 @@ export default function SinglePersonChat() {
         }
     };
 
+    /**
+     * open user profile component
+     */
     const showUserPorfile = () => {
         setShowUserChat(3)
     }
 
 
-
+    /**
+     * 
+     */
     const goBack = () => {
         setShowUserChat(1)
 
