@@ -29,7 +29,6 @@ export default function PopUp({ refOpenModal,setListOfUsers, inputRef, refCloseM
                 // If value exists, remove it
                 return prev.filter((item) => item !== value);
             } else {
-                // If value does not exist, add it
                 return [...prev, value];
             }
         });

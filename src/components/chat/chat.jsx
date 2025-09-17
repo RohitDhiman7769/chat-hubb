@@ -242,14 +242,14 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, par
     //   )}
 
     // </>
-   <>
+    <>
       {showSpinner ? (
         <div className="spinner-container">
           <div className="spinner"></div>
         </div>
       ) : (
         <>
-          <div className="chat-messages">
+          {/* <div className="chat-messages">
             {messages?.length > 0 ? (
               messages?.map((mes, index) => (
                 <div key={mes.id}>
@@ -394,7 +394,134 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, par
                 <i className="fa-solid fa-paper-plane"></i>
               </button>
             </div>
+          )} */}
+
+          <div className="chat-messages p-3" style={{ background: "#f5f7fb", minHeight: "70vh", overflowY: "auto" }}>
+            {messages?.length > 0 ? (
+              messages.map((mes, index) => (
+                <div key={mes.id}>
+                  {/* Date Divider */}
+                  {formatTimestamp(messages[index - 1]?.createdAt, 1) !== formatTimestamp(mes.createdAt, 1) && (
+                    <div className="text-center my-3">
+                      <span className="badge bg-light text-muted px-3 py-1 rounded-pill small">
+                        {formatTimestamp(mes.createdAt, 1)}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Right Side (My Message) */}
+                  {mes.user === currentUserId ? (
+                    <div className="chat-message d-flex justify-content-end mb-3">
+                      <div className="d-flex flex-column align-items-end">
+                        <div className="position-relative d-flex align-items-center">
+                          <div className="dropdown me-2">
+                            <button className="btn btn-sm text-muted" type="button" data-bs-toggle="dropdown">
+                              <i className="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul className="dropdown-menu dropdown-menu-end">
+                              <li>
+                                <button onClick={() => deleteWallMessage(mes.id)} className="dropdown-item">
+                                  <i className="fa fa-trash me-2 text-danger"></i> Delete
+                                </button>
+                              </li>
+                              <li>
+                                <button onClick={() => sendUserIdForReport(mes.user)} className="dropdown-item">
+                                  <i className="fa fa-flag me-2 text-warning"></i> Report user
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div className="message-content" ref={bottomRef}>
+                            {mes.type === "file" ? (
+                              <div className="file-message">
+                                <img src={mes.text} className="file-preview rounded" alt="Attachment" />
+                              </div>
+                            ) : (
+                              <div className="bubble bg-primary text-white px-3 py-2 rounded-3 shadow-sm">{mes.text}</div>
+                            )}
+                            {/* <span className="timestamp small text-muted d-block mt-1 text-end">
+                              {formatTimestamp(mes.createdAt)}
+                            </span> */}
+                          </div>
+                        </div>
+                      </div>
+                      <img className="avatar ms-2 rounded-circle" src={mes.image} alt="Avatar" style={{ width: 40, height: 40 }} />
+                    </div>
+                  ) : (
+                    /* Left Side (Other's Message) */
+                    <div className="chat-message d-flex justify-content-start mb-3">
+                      <img
+                        className="avatar me-2 rounded-circle"
+                        src={mes.image}
+                        alt="Avatar"
+                        style={{ width: 40, height: 40, cursor: "pointer" }}
+                        onClick={() => getUserId(mes)}
+                      />
+                      <div className="d-flex flex-column align-items-start">
+                        <p className="username mb-1 fw-bold text-primary small">{mes.name}</p>
+                        {mes.type === "file" ? (
+                          <div className="file-message small">
+                            <img src={mes.text} className="file-preview small rounded" alt="Attachment" />
+                          </div>
+                        ) : (
+                          <div className="bubble bg-light text-dark px-3 py-2 rounded-3 shadow-sm">{mes.text}</div>
+                        )}
+                        {/* <span className="timestamp small text-muted d-block mt-1">{formatTimestamp(mes.createdAt, 2)}</span> */}
+                      </div>
+
+                      <div className="dropdown ms-2">
+                        <button className="btn btn-sm text-muted" type="button" data-bs-toggle="dropdown">
+                          <i className="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li>
+                            <button onClick={() => sendUserIdForReport(mes.user)} className="dropdown-item">
+                              <i className="fa fa-flag me-2 text-warning"></i> Report user
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="no-messages text-center my-5">
+                <h5 className="text-muted">💬 No messages yet</h5>
+                <p className="small text-secondary">Start the conversation by sending a message!</p>
+              </div>
+            )}
+          </div>
+
+          {/* Chat Input */}
+          {paramToKnowComponent !== 2 && (
+            <div className="chat-input d-flex align-items-center border-top bg-white p-2">
+              <textarea
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="form-control me-2 rounded-pill"
+                placeholder="Type a message..."
+                rows="1"
+                style={{ resize: "none" }}
+              />
+              <label htmlFor="file_input" className="btn btn-light rounded-circle me-2">
+                <i className="fa-solid fa-paperclip"></i>
+              </label>
+              <input
+                type="file"
+                id="file_input"
+                onChange={getImages}
+                hidden
+                multiple
+                accept="image/*,video/*"
+              />
+              <button className="btn btn-primary rounded-circle" onClick={sendMessage}>
+                <i className="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
           )}
+
         </>
       )}
     </>

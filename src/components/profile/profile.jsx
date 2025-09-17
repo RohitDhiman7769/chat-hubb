@@ -58,10 +58,10 @@ function Profile() {
 
     }
 
- /**
-  * 
-  * @param {*} data  show user profile comp
-  */
+    /**
+     * 
+     * @param {*} data  show user profile comp
+     */
     const showUserProfileComponent = (data) => {
         console.log(data)
         setShowUserProfileComponent(false)
@@ -96,28 +96,31 @@ function Profile() {
 
                                                 </div>
                                             </div>
-                                            <div className="dropdown setting_drop three_dot seeting_btn_desktop">
-                                                <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
+                                            
+                                            <div className=" setting_drop three_dot seeting_btn_desktop">
+                                                <button
+                                                    className="btn"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
                                                     <i className="fa-solid fa-ellipsis-vertical"></i>
-                                                    {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
-                                                </a>
+                                                </button>
 
                                                 <ul className="dropdown-menu">
                                                     <li onClick={logOut}>
-                                                        <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
-                                                            Log-out</a>
+                                                        <button className="dropdown-item">
+                                                            <img src="assets/images/customer-contact.svg" alt="" /> Log-out
+                                                        </button>
                                                     </li>
                                                     <li>
-                                                        <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#delete_chat">
-                                                            <img src="assets/images/delete.svg" alt="" />
-                                                            Delete Account</a>
+                                                        <button className="dropdown-item delete_item" data-bs-toggle="modal" data-bs-target="#delete_chat">
+                                                            <img src="assets/images/delete.svg" alt="" /> Delete Account
+                                                        </button>
                                                     </li>
-
                                                 </ul>
                                             </div>
+
                                         </div>
                                         <div className="chat_body ">
 

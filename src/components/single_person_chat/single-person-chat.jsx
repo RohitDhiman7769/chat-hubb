@@ -42,37 +42,6 @@ export default function SinglePersonChat() {
         }
     }, [showUserChat]);
 
-    // useEffect(() => {
-    //     const socket = new WebSocket('ws://localhost:8000/api/users/ws');
-
-    //     console.log(socket)
-    //     socket.onopen = () => {
-    //         console.log('Connected to WebSocket');
-    //     };
-
-    //     socket.onmessage = (event) => {
-    //         console.log('Message from server:', event.data);
-
-    //         if (event.data === "Database changed!") {
-    //             // 🔥 Now call your API to fetch latest data
-    //             fetch('http://localhost:8000/api/users/simulate_db_change')
-    //                 .then(res => res.json())
-    //                 .then(data => {
-    //                     console.log('Fetched new data:', data);
-    //                     // Update your UI state here
-    //                 });
-    //         }
-    //     };
-
-    //     socket.onclose = () => {
-    //         console.log('WebSocket connection closed');
-    //     };
-
-    //     return () => {
-    //         socket.close();
-    //     };
-    // }, [])
-
 
     /**
      * fetch added user list
@@ -153,57 +122,87 @@ export default function SinglePersonChat() {
     if (showUserChat == 1) {
         return (
             <>
-                <section className="chat_main_section">
+                <section className="chat_main_section py-4" style={{ background: "#f5f7fb", minHeight: "100vh" }}>
                     <div className="container-fluid">
                         <div className="container">
                             <div className="main_form">
                                 <div className="row form_row">
-                                    <div className="col-lg-12 fom_data ">
-                                        <div className="chat_container position-relative">
+                                    <div className="col-lg-12 fom_data">
+                                        <div className="chat_container bg-white rounded shadow-sm p-3 position-relative">
 
-                                            <div >
-                                                <div className=" d-flex justify-content-between align-items-center">
-
-                                                    <h2 style={{ paddingTop: '20px', paddingLeft: '25px' }}>Chats</h2>
-                                                    <button onClick={() => { modalOpenBtn.current.click() }}>Add Friend</button>
-                                                </div>
-
-
-                                                {usersList.length > 0 ?
-                                                    usersList.map((user) => {
-                                                        return (
-                                                            <div onClick={() => showChat(user)} key={user._id} style={{ margin: '2px', border: '1px solid black' }} className="person_status_box d-flex justify-content-start align-items-center ">
-                                                                <div className="image_box">
-                                                                    <img src={user.profile_img} alt="" />
-                                                                </div>
-                                                                <div className="person_status d-block">
-                                                                    <h4 className="m-o person_name_head">
-                                                                        {user.email.split('@')[0]}
-                                                                    </h4>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    })
-                                                    :
-                                                    <div>
-                                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <p>No chat exist</p>
-                                                        </div>
-                                                        <div>
-                                                            <span style={{ fontWeight: 700 }}>Note:</span> <span>First add friend from world chat or click to add friend button for add any user or search user name</span>
-                                                        </div>
-                                                    </div>
-                                                }
-
-
+                                            {/* Header */}
+                                            <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                                <h2 className="fw-bold text-primary mb-0">Chats</h2>
+                                                <button
+                                                    onClick={() => modalOpenBtn.current.click()}
+                                                    className="btn btn-sm btn-primary rounded-pill px-3"
+                                                >
+                                                    + Add Friend
+                                                </button>
                                             </div>
+
+                                            {/* Chat List */}
+                                            {usersList.length > 0 ? (
+                                                <div className="chat-list" style={{ maxHeight: "65vh", overflowY: "auto" }}>
+                                                    {usersList.map((user) => (
+                                                        <div
+                                                            onClick={() => showChat(user)}
+                                                            key={user._id}
+                                                            className="user-card d-flex align-items-center p-2 mb-2 rounded"
+                                                            style={{
+                                                                cursor: "pointer",
+                                                                transition: "all 0.2s ease-in-out",
+                                                                background: "#fff",
+                                                                border: "1px solid #e0e0e0",
+                                                            }}
+                                                        >
+                                                            {/* Avatar */}
+                                                            <div
+                                                                className="user-avatar me-3"
+                                                                style={{
+                                                                    width: "45px",
+                                                                    height: "45px",
+                                                                    borderRadius: "50%",
+                                                                    overflow: "hidden",
+                                                                    border: "2px solid #007bff",
+                                                                    flexShrink: 0,
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={user.profile_img}
+                                                                    alt={user.email}
+                                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                                />
+                                                            </div>
+
+                                                            {/* User Info */}
+                                                            <div className="d-flex flex-column">
+                                                                <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: "15px" }}>
+                                                                    {user.email.split("@")[0]}
+                                                                </h6>
+                                                                <small className="text-muted">Click to chat</small>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center mt-4">
+                                                    <p className="fw-bold text-secondary">No chats available</p>
+                                                    <div className="alert alert-info small mt-2 text-start">
+                                                        <span className="fw-bold">💡 Tip:</span> First add a friend from <b>World Chat</b>,
+                                                        or click <b>Add Friend</b> to search and connect with users.
+                                                    </div>
+                                                </div>
+                                            )}
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section >
+                </section>
+
 
                 <PopUp listOfUsersToShow={listOfUsers} setListOfUsers={setListOfUsers} inputRef={inputRef} fetchUserList={updateItems} getAllUser={fetchAllUser} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} />
 

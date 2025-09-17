@@ -45,7 +45,7 @@ function RoomChat() {
         };
 
         fetchData();
-    }, []); // Runs only once when the component mounts
+    }, []);
 
 
 
@@ -70,9 +70,10 @@ function RoomChat() {
     const fetchUserFriends = async () => {
         try {
             const getRoomList = await apiService.get(`/room-list?userId=${currentUserId}`);
+            console.log(getRoomList)
             setShowSpinner(false)
-            setRoomList(getRoomList.data.room_list)
-            if (getRoomList.data.room_list.length == 0) {
+            setRoomList(getRoomList?.data?.data)
+            if (getRoomList?.data?.room_list.length == 0) {
                 alert('No room exisst, Please creat room')
             }
         } catch (err) {
@@ -196,20 +197,55 @@ function RoomChat() {
                                                         </>
                                                         :
                                                         <div className="chat_person_head  ">
-                                                            {roomList.length == 0 ?
+                                                            {roomList?.length == 0 ?
                                                                 <> <div className='d-flex justify-content-center'><h4>No room exist, Please creat room for group chat</h4></div> </>
                                                                 :
-                                                                roomList.map((room) => (
-                                                                    <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
-                                                                        <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
-                                                                            <div className="image_box">
-                                                                                <img src={room.image} alt="" />
+
+                                                                <div className="room-list">
+                                                                    {roomList.map((room) => (
+                                                                        <div
+                                                                            key={room.room_id}
+                                                                            className="room-card d-flex align-items-center p-2 mb-2 rounded shadow-sm"
+                                                                            style={{
+                                                                                cursor: "pointer",
+                                                                                transition: "all 0.2s ease-in-out",
+                                                                                background: "#fff",
+                                                                                border: "1px solid #e0e0e0",
+                                                                            }}
+                                                                            onClick={() => getAllChatOnRoomId(room)}
+                                                                        >
+                                                                            {/* Room Image */}
+                                                                            <div
+                                                                                className="room-avatar me-3"
+                                                                                style={{
+                                                                                    width: "50px",
+                                                                                    height: "50px",
+                                                                                    borderRadius: "12px",
+                                                                                    overflow: "hidden",
+                                                                                    flexShrink: 0,
+                                                                                    background: "#f1f1f1",
+                                                                                }}
+                                                                            >
+                                                                                <img
+                                                                                    src={room.image}
+                                                                                    alt={room.room_name}
+                                                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                                                />
                                                                             </div>
-                                                                            <h1 style={{ marginLeft: '20px' }}>{room.room_name}</h1>
+
+                                                                            {/* Room Info */}
+                                                                            <div className="d-flex flex-column">
+                                                                                <h6 className="mb-1 fw-bold text-dark" style={{ fontSize: "16px" }}>
+                                                                                    {room.room_name}
+                                                                                </h6>
+                                                                                <small className="text-muted">Click to join chat</small>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                ))}
+                                                                    ))}
+                                                                </div>
+                                                            }
                                                         </div>
+
                                                     }
                                                 </>
 

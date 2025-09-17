@@ -58,7 +58,7 @@ function WorldChat() {
                                                 </div>
                                                 <div className="person_status">
                                                     <h4 className="m-o person_name_head">
-                                                        Open World Chat
+                                                        World Chat
                                                     </h4>
                                                 </div>
                                             </div>
