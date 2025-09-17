@@ -108,7 +108,7 @@ export default function SinglePersonChat() {
      * fetch all users from backend
      */
     const fetchAllUser = async () => {
-        const response = await apiService.get(`/fetch-all-users?userId${user}`);
+        const response = await apiService.get(`/fetch-all-users?userId=${user}`);
         setListOfUsers(response.data.data)
         inputRef.current.value = ''
     }

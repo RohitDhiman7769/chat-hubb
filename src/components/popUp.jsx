@@ -72,7 +72,11 @@ export default function PopUp({ refOpenModal,setListOfUsers, inputRef, refCloseM
                                     <Input placeholder={'Search user'} inputRef={inputRef} name={'searchUser'} setFieldValue={searchUser} paramToKnowComp={2} type={'text'} />
                                     <button onClick={getAllUser} type="button" className={selectedUserForFriend.length > 0 ? 'check_btn color_check' : 'check_btn'} ><i className="fa-solid fa-square-check"></i></button>
                                 </div>
-                                {listOfUsersToShow?.map((user) => {
+                                {listOfUsersToShow.length == 0 ? 
+
+                                <>No user exist</>
+                                :
+                                listOfUsersToShow?.map((user) => {
                                     return (
                                         <React.Fragment key={user._id}>
 

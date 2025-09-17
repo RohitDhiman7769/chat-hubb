@@ -71,8 +71,10 @@ function RoomChat() {
         try {
             const getRoomList = await apiService.get(`/room-list?userId=${currentUserId}`);
             setShowSpinner(false)
-            console.log(getRoomList)
             setRoomList(getRoomList.data.room_list)
+            if (getRoomList.data.room_list.length == 0) {
+                alert('No room exisst, Please creat room')
+            }
         } catch (err) {
             console.log(err)
         }
@@ -118,7 +120,7 @@ function RoomChat() {
         console.log(roomType)
         if (roomType == 2) {
             try {
-                const response = await apiService.get(`/fetch-all-users?userId${currentUserId}`);
+                const response = await apiService.get(`/fetch-all-users?userId=${currentUserId}`);
                 setListOfUsers(response.data.data)
                 inputRef.current.value = ''
             } catch (err) {
@@ -157,14 +159,7 @@ function RoomChat() {
                                     <div className="col-lg-12 fom_data ">
                                         <div className="chat_container position-relative">
                                             <div className="chat_person_head d-flex justify-content-between align-items-center pop_up_search ">
-                                                {/* <div>
-                                                    <label>Search room: </label>
-                                                    <Input type={Text} name={'searchRoom'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
-                                                </div>
-                                                <div>
-                                                    <label>Creat room: </label>
-                                                    <p onClick={() => setShowRoomCreatInput(true)}>+</p>
-                                                </div> */}
+
                                                 <div className='row w-100'>
                                                     <div className='col-md-8'>
                                                         <div className='room_inside_input_box'>
@@ -175,18 +170,18 @@ function RoomChat() {
                                                     </div>
                                                     <div className='col-md-4'>
                                                         <div className='btn_box_room'>
-                                                        <button className='find_room float-right' onClick={() => setShowRoomCreatInput(true)}>
-                                                            Creat room: +
-                                                        </button>
+                                                            <button className='find_room float-right' onClick={() => setShowRoomCreatInput(true)}>
+                                                                Creat room: +
+                                                            </button>
                                                         </div>
-                                                       
+
 
                                                     </div>
                                                 </div>
 
 
                                             </div>
-                                            <h1>{showRoomCreatInput}</h1>
+                                            {/* <h1>{showRoomCreatInput}</h1> */}
 
                                             {showRoomCreatInput == false ?
                                                 <>
@@ -201,16 +196,19 @@ function RoomChat() {
                                                         </>
                                                         :
                                                         <div className="chat_person_head  ">
-                                                            {roomList && roomList.map((room) => (
-                                                                <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
-                                                                    <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
-                                                                        <div className="image_box">
-                                                                            <img src={room.image} alt="" />
+                                                            {roomList.length == 0 ?
+                                                                <> <div className='d-flex justify-content-center'><h4>No room exist, Please creat room for group chat</h4></div> </>
+                                                                :
+                                                                roomList.map((room) => (
+                                                                    <div key={room.room_id} style={{ display: 'flex' }} className="person_status_box d-flex justify-content-start align-items-center ">
+                                                                        <div onClick={() => getAllChatOnRoomId(room)} className="roomNameBox">
+                                                                            <div className="image_box">
+                                                                                <img src={room.image} alt="" />
+                                                                            </div>
+                                                                            <h1 style={{ marginLeft: '20px' }}>{room.room_name}</h1>
                                                                         </div>
-                                                                        <h1 style={{ marginLeft: '20px' }}>{room.room_name}</h1>
                                                                     </div>
-                                                                </div>
-                                                            ))}
+                                                                ))}
                                                         </div>
                                                     }
                                                 </>
@@ -221,7 +219,7 @@ function RoomChat() {
                                                 (<div className="chat_body ">
                                                     {showRoomCreatInput ?
 
-                                                    
+
                                                         <div className='main auth_form' style={{ display: 'block', justifyContent: 'center', marginLeft: 'auto', marginTop: '40px' }}>
                                                             <div className='room_input_box'>
                                                                 <label style={{ marginLeft: '16px' }}>Enter room name : </label>
@@ -238,7 +236,7 @@ function RoomChat() {
                                                                 <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
                                                                 <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
                                                             </div>
-                                                            <div  style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
                                                                 <button className='find_room ' onClick={getUserList} disabled={roomName === ''}>Add Member</button>
                                                                 {/* <button onClick={getRoomName} disabled={roomName === ''}>Add Member</button> */}
                                                             </div>
