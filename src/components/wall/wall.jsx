@@ -40,13 +40,13 @@ function Wall() {
     }
     if (isShowUserProfileComponent) {
         return (
-            <section className="chat_main_section">
-                <div className="container-fluid">
-                    <div className="container">
+            // <section className="chat_main_section">
+            //     <div className="container-fluid">
+            //         <div className="container">
 
-                        <div className="main_form">
-                            <div className="row form_row">
-                                <div className="col-lg-12 fom_data ">
+            //             <div className="main_form">
+            //                 <div className="row form_row">
+            //                     <div className="col-lg-12 fom_data ">
                                     <div className="chat_container position-relative">
                                         <div className="chat_person_head d-flex justify-content-between align-items-center">
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
@@ -66,12 +66,12 @@ function Wall() {
                                         </div>
                                             <Chat paramToKnowComponent={2} conversationDocRef={conversationDocRef} conversationId={conversationId} ref={ChatComponent} appendUserId={(e) => showUserProfileComp(e)} ></Chat>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </section>
         );
 
     } else {

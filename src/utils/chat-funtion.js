@@ -22,8 +22,9 @@ export const ReportUserId = async (value) => {
  * @returns 
  */
 export const fetchParticularUserProfile = async (value) => {
+    let id = localStorage.getItem("user_id")
     try {
-        const response = await apiService.get(`/get-single-user-profile-data?userId=${value}`);
+        const response = await apiService.get(`/get-single-user-profile-data?userId=${value}&&loginUserId=${id}`);
         return response
     } catch (err) {
         console.log(err)

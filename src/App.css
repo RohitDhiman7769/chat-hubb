@@ -55,7 +55,7 @@
   display: flex;
   background-color: #082238bd;
   height: 60px;
-  margin-top: 12px;
+  /* margin-top: 12px; */
   border-radius: 8px;
   justify-content: center;
   align-items: center;
@@ -293,4 +293,176 @@ height: 45px;
   transition:
 all .5s ease;
 
+}
+
+
+/* Prevent scroll */
+.no-scroll {
+  overflow: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Margin top for children */
+.children-wrapper {
+  margin-top: 20px; /* Adjust as needed */
+}
+
+/* Feedback button fixed at bottom-right */
+.feedback-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+/* Feedback modal styling */
+.feedback-modal {
+  position: fixed;
+  bottom: 70px; /* just above the button */
+  right: 20px;
+  background: #fff;
+  border: 1px solid #00000029;
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+  z-index: 1100;
+}
+
+.feedback-modal h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #475b6b;
+}
+
+.feedback-modal textarea {
+  width: 100%;
+  height: 80px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+  resize: none;
+}
+
+.feedback-modal button {
+  margin-top: 10px;
+  width: 100%;
+  background-color: #475b6bc9;
+  border-radius: 6px;
+  height: 36px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.feedback-modal button:hover {
+  background-color: #26313b;
+}
+
+
+/* Modal Base */
+.feedback-modal {
+  position: fixed;
+  bottom: 70px; /* above the button */
+  right: 20px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.25);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+/* Animation */
+.animate-modal {
+  animation: fadeSlideUp 0.3s ease;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedback-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #26313b;
+}
+
+.close-btn {
+  font-size: 20px;
+  cursor: pointer;
+  color: #475b6b;
+  transition: color 0.2s ease;
+}
+.close-btn:hover {
+  color: #ff4d4d;
+}
+
+/* Subtitle */
+.feedback-subtitle {
+  font-size: 13px;
+  color: #6c7a89;
+  margin: 0;
+}
+
+/* Textarea */
+.feedback-modal textarea {
+  width: 100%;
+  height: 90px;
+  border: 1px solid #d0d7de;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  resize: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-modal textarea:focus {
+  /* border-color: #475b6b;  */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(71,91,107,0.2);
+}
+
+/* Button */
+.submit-btn {
+  background: #475b6bc9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.submit-btn:hover {
+  background: #26313b;
+}
+
+.submit-btn:active {
+  transform: scale(0.97);
 }

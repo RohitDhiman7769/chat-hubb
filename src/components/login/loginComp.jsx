@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup"; // Import Yup for validation
 import Input from "../input_filed/inputField";
@@ -6,13 +6,16 @@ import './login.css'
 import GoogleAuth from "../google-auth";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../apiService";
-
+// import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../App";
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email format").required("Email is required"),
     password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
 });
 
 function Login() {
+    console.log( useContext(AuthContext))
+    const { setIsLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
 
@@ -37,8 +40,11 @@ function Login() {
                     localStorage.setItem('email', response.data.user_data.email)
                     localStorage.setItem('profile_img', response.data.user_data.profile_img)
                     localStorage.setItem('initial_login', response.data.user_data.initial_login)
-                    console.log(response.data.user_data)
+                    setIsLoggedIn(true);
                     navigate("/home");
+                } else {
+                    setShowSpinner(false)
+                    alert(response.data.error)
                 }
             } catch (error) {
                 setShowSpinner(false)

@@ -26,7 +26,7 @@ function RoomChat() {
     const [showRoomCreatInput, setShowRoomCreatInput] = useState(false)
     const [roomMember, setRoomMember] = useState([])
     const [showChatComp, setShowChatComp] = useState(1)
-    const [roomList, setRoomList] = useState([])
+    const [roomList, setRoomList] = useState([{}])
     const [selecetedRoomImage, setSelecetedRoomImage] = useState(null)
     const [roomType, setRoomType] = useState()
     const [listOfUsers, setListOfUsers] = useState([])
@@ -155,12 +155,12 @@ function RoomChat() {
     if (showChatComp == 1) {
         return (
             <>
-                <section className="chat_main_section">
+                {/* <section className="chat_main_section">
                     <div className="container-fluid">
                         <div className="container">
                             <div className="main_form">
                                 <div className="row form_row">
-                                    <div className="col-lg-12 fom_data ">
+                                    <div className="col-lg-12 fom_data "> */}
                                         <div className="chat_container position-relative">
                                             <div className="chat_person_head d-flex justify-content-between align-items-center pop_up_search ">
 
@@ -205,7 +205,7 @@ function RoomChat() {
                                                                 :
 
                                                                 <div className="room-list">
-                                                                    {roomList.map((room) => (
+                                                                    {roomList && roomList.map((room) => (
                                                                         <div
                                                                             key={room.room_id}
                                                                             className="room-card d-flex align-items-center p-2 mb-2 rounded shadow-sm"
@@ -289,12 +289,12 @@ function RoomChat() {
                                             }
 
                                         </div>
-                                    </div>
+                                    {/* </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
                 <PopUp listOfUsersToShow={listOfUsers} inputRef={inputRef} fetchUserList={getRoomName} getAllUser={getUserList} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} />
             </>
         )
@@ -302,15 +302,15 @@ function RoomChat() {
 
 
         return (
-            <section className="chat_main_section">
-                <div className="container-fluid">
-                    <div className="container">
+            // <section className="chat_main_section">
+            //     <div className="container-fluid">
+            //         <div className="container">
 
-                        <div className="main_form">
-                            <div className="row form_row">
+            //             <div className="main_form">
+            //                 <div className="row form_row">
 
 
-                                <div className="col-lg-12 fom_data ">
+            //                     <div className="col-lg-12 fom_data ">
 
                                     <div className="chat_container position-relative">
 
@@ -354,24 +354,24 @@ function RoomChat() {
                                         <Chat conversationDocRef={conversationDocRef} conversationId={conversationId} ref={ChatComponent} appendUserId={(e) => setShowUserChat(e)} ></Chat>
 
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </section>
         );
     } else if (showChatComp == 3) {
         return (
-            <section className="chat_main_section">
-                <div className="container-fluid">
-                    <div className="container">
+            // <section className="chat_main_section">
+            //     <div className="container-fluid">
+            //         <div className="container">
 
-                        <div className="main_form">
-                            <div className="row form_row">
+            //             <div className="main_form">
+            //                 <div className="row form_row">
 
 
-                                <div className="col-lg-12 fom_data ">
+            //                     <div className="col-lg-12 fom_data ">
 
                                     <div className="chat_container position-relative">
                                         <div>
@@ -442,12 +442,12 @@ function RoomChat() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </section>
         );
 
     }

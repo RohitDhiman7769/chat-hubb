@@ -30,7 +30,7 @@ function WorldChat() {
        * @param {*} data fetch user profile for view
        */
     const showUserProfileComp = async (data) => {
-        console.log(data)
+        // console.log(data)
         try {
             const response = await fetchParticularUserProfile(data);
             console.log(response)
@@ -44,40 +44,40 @@ function WorldChat() {
     }
     if (showChatComp) {
         return (
-            <section className="chat_main_section">
-                <div className="container-fluid">
-                    <div className="container">
-                        <div className="main_form">
-                            <div className="row form_row">
-                                <div className="col-lg-12 fom_data ">
+            // <section className="chat_main_section">
+            //     <div className="container-fluid">
+            //         <div className="container">
+            //             <div className="main_form">
+            //                 <div className="row form_row">
+            //                     <div className="col-lg-12 fom_data ">
                                     <div className="chat_container position-relative">
                                         <div className="chat_person_head d-flex justify-content-between align-items-center">
                                             <div className="person_status_box d-flex justify-content-start align-items-center">
-                                                <div className="image_box">
+                                                {/* <div className="image_box">
                                                     <img src="https://rohit-dhiman-buckt.s3.eu-north-1.amazonaws.com/Untitled+(1).png" alt="" />
-                                                </div>
+                                                </div> */}
                                                 <div className="person_status">
                                                     <h4 className="m-o person_name_head">
                                                         World Chat
                                                     </h4>
                                                 </div>
                                             </div>
-                                            <div className="dropdown setting_drop three_dot seeting_btn_mobile">
+                                            {/* <div className="dropdown setting_drop three_dot seeting_btn_mobile">
                                                 <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="modal"
                                                     data-bs-target="#selectTag" aria-expanded="false">
 
                                                     <img className="threeDOt" src="assets/images/3dot.svg" alt="" />
                                                 </a>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <Chat conversationDocRef={conversationDocRef} conversationId={conversationId} ref={ChatComponent} appendUserId={(e) => showUserProfileComp(e)} ></Chat>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </div>
+            // </section>
         );
     } else {
         return (

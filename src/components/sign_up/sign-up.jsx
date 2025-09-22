@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup"; 
-import Input from "../input_filed/inputField"; 
+import * as Yup from "yup";
+import Input from "../input_filed/inputField";
 import './signUp.css'
 import GoogleAuth from "../google-auth";
 import AWS from "aws-sdk";
@@ -9,7 +9,9 @@ import.meta.env.VITE_API_KEY
 import { addImageInS3Bucket } from "../../utils/chat-funtion";
 import apiService from "../../apiService";
 import { useNavigate } from "react-router-dom";
-
+// import throttle from "lodash.throttle";
+import { useCallback } from "react";
+import lodash from "lodash";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email format").required("Email is required"),
@@ -18,39 +20,83 @@ const validationSchema = Yup.object().shape({
     confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match").min(6, "Confirm Password must be at least 6 characters").required("Confirm Password is required"),
 });
 
-function SignUp({ updateCompValue }) {
+function SignUp() {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
 
     /**
      * Formik form handling and validation
      */
+    // const formik = useFormik({
+    //     initialValues: { email: "", password: "", confirmPassword: "", profilePicture: '' },
+    //     validationSchema: validationSchema,
+    //     onSubmit: async (values) => {
+    //         const image = await addImageInS3Bucket(values.profilePicture)
+    //         console.log(image)
+    //         try {
+    //             setShowSpinner(true)
+    //             const response = await apiService.post("/sign-up", {
+    //                 password: values.password,
+    //                 email: values.email,
+    //                 profileImage: image
+    //             });
+    //             console.log(response)
+
+    //             if (response.data.code == 200) {
+    //                 setShowSpinner(false)
+    //                 alert(response.data.message)
+    //                 updateCompValue(1)
+    //                 navigate("/log-in");
+    //             }else{
+    //                 alert(response.data.message)
+    //                 setShowSpinner(false)
+
+    //             }
+    //         } catch (error) {
+    //             console.log("Error uploading file:", error);
+    //         }
+
+
+    //     }
+    // });
+
     const formik = useFormik({
-        initialValues: { email: "", password: "", confirmPassword: "", profilePicture: '' },
+        initialValues: { email: "", password: "", confirmPassword: "", profilePicture: "" },
         validationSchema: validationSchema,
-        onSubmit: async (values) => {
-            const image = await addImageInS3Bucket(values.profilePicture)
-            console.log(image)
-            try {
-                setShowSpinner(true)
-                const response = await apiService.post("/sign-up", {
-                    password: values.password,
-                    email: values.email,
-                    profileImage: image
-                });
 
-                if (response.data.code == 200) {
-                    setShowSpinner(false)
-                    alert(response.data.message)
-                    updateCompValue(1)
-                    navigate("/log-in");
+        // Wrap onSubmit in throttle
+        onSubmit: useCallback(
+            lodash.throttle(async (values) => {
+                const image = await addImageInS3Bucket(values.profilePicture);
+                console.log(image);
+
+                try {
+                    setShowSpinner(true);
+
+                    const response = await apiService.post("/sign-up", {
+                        password: values.password,
+                        email: values.email,
+                        profileImage: image,
+                    });
+
+                    console.log(response);
+
+                    if (response.data.code === 200) {
+                        setShowSpinner(false);
+                        alert(response.data.message);
+                        // updateCompValue(1);
+                        navigate("/log-in");
+                    } else {
+                        alert(response.data.message);
+                        setShowSpinner(false);
+                    }
+                } catch (error) {
+                    console.log("Error uploading file:", error);
+                    setShowSpinner(false);
                 }
-            } catch (error) {
-                console.log("Error uploading file:", error);
-            }
-
-
-        }
+            }, 3000), // ⏳ only allow once every 3 sec
+            []
+        ),
     });
 
 
