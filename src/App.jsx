@@ -5,6 +5,8 @@ import Header from './components/header/Header';
 import { Provider } from 'react-redux';
 import appStore from './utils/appStore';
 import Feedback from './assets/feedback.png';
+// import Snackbar from '@mui/material/Snackbar';
+import { SnackbarProvider } from 'notistack';
 // Lazy loaded pages
 const SinglePersonChat = lazy(() => import('./components/single_person_chat/single-person-chat'));
 const RoomChat = lazy(() => import('./components/room_chat/room-chat'));
@@ -16,33 +18,6 @@ const SignUp = lazy(() => import('./components/sign_up/sign-up'));
 const ForgetPassword = lazy(() => import('./components/forgetPassowrd'));
 
 export const AuthContext = createContext();
-
-// const PrivateLayout = ({ children }) => {
-//   return (
-//     <div className="auth-main">
-//       <section className="chat_main_section py-4" style={{ minHeight: "100vh" }}>
-//         <div className="container-fluid">
-//           <div className="container">
-//             <div className="main_form">
-//               <div className="row form_row">
-//                 <Header />
-//                 <Suspense fallback={<div>Loading...</div>}>
-//                   {children}
-//                 </Suspense>
-
-//                 <div>
-//                   <img style={{ height: '25px' }} src={Feedback} alt="" />
-//                 </div>
-
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         {/* </div> */}
-//       </section >
-//     </div >
-//   )
-// }
 
 
 const PrivateLayout = ({ children }) => {
@@ -94,24 +69,18 @@ const PrivateLayout = ({ children }) => {
         </div>
 
         {/* Feedback modal */}
-        {/* {isOpen && (
-          <div className="feedback-modal" ref={modalRef}>
-            <h4>Feedback</h4>
-            <textarea placeholder="Write your feedback..." />
-            <button>Submit</button>
-          </div>
-        )} */}
+
         {isOpen && (
-  <div className="feedback-modal animate-modal" ref={modalRef}>
-    <div className="feedback-header">
-      <h4>We value your feedback</h4>
-      <span className="close-btn" onClick={() => setIsOpen(false)}>×</span>
-    </div>
-    <p className="feedback-subtitle">Tell us what you think about your experience.</p>
-    <textarea placeholder="Write your feedback..." />
-    <button className="submit-btn">Submit Feedback</button>
-  </div>
-)}
+          <div className="feedback-modal animate-modal" ref={modalRef}>
+            <div className="feedback-header">
+              <h4>We value your feedback</h4>
+              <span className="close-btn" onClick={() => setIsOpen(false)}>×</span>
+            </div>
+            <p className="feedback-subtitle">Tell us what you think about your experience.</p>
+            <textarea placeholder="Write your feedback..." />
+            <button className="submit-btn">Submit Feedback</button>
+          </div>
+        )}
 
       </section>
     </div>
@@ -147,6 +116,8 @@ function App() {
   return (
     <Provider store={appStore}>
       <AuthContext.Provider value={contextValue}>
+        {/* <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'start', horizontal: 'top' }}> */}
+<SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <BrowserRouter>
           <Routes>
             {/* Private routes */}
@@ -166,6 +137,7 @@ function App() {
             <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/log-in"} replace />} />
           </Routes>
         </BrowserRouter>
+        </SnackbarProvider>
       </AuthContext.Provider>
     </Provider>
   );

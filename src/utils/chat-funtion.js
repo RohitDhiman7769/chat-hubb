@@ -7,12 +7,16 @@ import.meta.env.VITE_API_KEY
  * @param {*} value get report user id and send into backend
  * @returns fetch response
  */
-export const ReportUserId = async (value) => {
+export const ReportUserId = async (data ) => {
     try {
-        const response = await apiService.get(`/report-user?userId=${value}`);
+        const response = await apiService.post(`/report-user`, {data});
+
+        // const response = await apiService.get(`/report-user?reportedTo=${reportedTo}&reportedBy=${reportedBy}`);
         return response
     } catch (err) {
-        console.log(err)
+
+        return err
+        // console.log(err)
     }
 };
 

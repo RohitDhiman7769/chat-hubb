@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import Chat from '../chat/chat';
 import PopUp from '../popUp';
 import '../newChat.css';
-
+// import circular
 export default function SinglePersonChat() {
     const modalOpenBtn = useRef();
     const modalCloseBtn = useRef()
@@ -153,6 +153,7 @@ export default function SinglePersonChat() {
                                                     + Add Friend
                                                 </button>
                                             </div>
+                                            {/* <CircularProgress color="inherit" /> */}
 
                                             {/* Chat List */}
                                             {usersList.length > 0 ? (
