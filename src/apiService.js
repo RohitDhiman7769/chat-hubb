@@ -1,8 +1,6 @@
 import axios from "axios";
-const API_BASE_URL ='http://localhost:3000/api/users/'
-// const API_BASE_URL ='https://chat-backend-mw6l.onrender.com/api/users/'
-// const API_BASE_URL ='https://chat-backend-mw6l.onrender.com/api/users/'
-// const API_BASE_URL ='http://localhost:3000/'
+// const API_BASE_URL ='http://localhost:3000/api/users/'
+const API_BASE_URL ='https://chat-backend-mw6l.onrender.com/api/users/'
 
 // Create an Axios instance for default settings
 const apiClient = axios.create({
