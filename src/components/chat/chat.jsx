@@ -24,7 +24,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, par
   const [messages, setMessages] = useState([])
   const [showSpinner, setShowSpinner] = useState(true)
   const bottomRef = useRef(null);
-const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   useImperativeHandle(ref, () => ({
     callChatFunct: () => {
@@ -38,7 +38,7 @@ const { enqueueSnackbar } = useSnackbar();
    * fetch data from firebase
    */
   const fetchChatFromFireBase = () => {
-    console.log(conversationDocRef, conversationId)
+    // console.log(conversationDocRef, conversationId)
     const messagesCollectionRef = collection(conversationDocRef, conversationId);
     const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
 
@@ -111,7 +111,7 @@ const { enqueueSnackbar } = useSnackbar();
       enqueueSnackbar(response.data.message, { variant: "success" });
       // <Toast message={"User reported successfully"} type={"success"} / >
       // setShowToast(true)
-    }else{
+    } else {
       console.log('working')
       enqueueSnackbar(response.response.data.message, { variant: "warning" });
 
@@ -376,7 +376,7 @@ const { enqueueSnackbar } = useSnackbar();
                               <i className="fa-solid fa-ellipsis-vertical"></i>
                             </button>
                             <ul className="dropdown-menu dropdown-menu-end">
-                             
+
                               <li>
                                 <button
                                   onClick={() => sendUserIdForReport(mes.user)}

@@ -6,6 +6,8 @@ import './login.css'
 import GoogleAuth from "../google-auth";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../apiService";
+import { useSnackbar } from "notistack";
+
 // import { Navigate } from "react-router-dom";
 // import { AuthContext } from "../../App";
 import { AuthContext } from "../../App";
@@ -15,10 +17,11 @@ const validationSchema = Yup.object().shape({
 });
 
 function Login() {
-    console.log( useContext(AuthContext))
+    // console.log( useContext(AuthContext))
     const { setIsLoggedIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
+    const { enqueueSnackbar } = useSnackbar();
 
     /**
      * Formik form handling and validation
@@ -35,7 +38,8 @@ function Login() {
                 });
                 if (response.data.code == 200) {
                     setShowSpinner(false)
-                    alert(response.data.message)
+                    // alert(response.data.message)
+                    enqueueSnackbar(response.data.message, { variant: "success" });
                     localStorage.setItem('auth_token', response.data.access_token)
                     localStorage.setItem('user_id', response.data.user_data._id)
                     localStorage.setItem('email', response.data.user_data.email)
@@ -45,7 +49,9 @@ function Login() {
                     navigate("/home");
                 } else {
                     setShowSpinner(false)
-                    alert(response.data.error)
+                    // alert(response.data.error)
+                    enqueueSnackbar(response.data.message, { variant: "error" });
+
                 }
             } catch (error) {
                 setShowSpinner(false)

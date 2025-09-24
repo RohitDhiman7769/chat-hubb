@@ -85,21 +85,22 @@ function RoomChat() {
     /**
      * update room name state
      */
-    const getRoomName = async (data) => {
+    const createRoom = async () => {
         const image = await addImageInS3Bucket(selecetedRoomImage)
-        data.push(currentUserId)
-        console.log(data)
+        // data.push(currentUserId)
+        // console.log(data)
         try {
             const response = await apiService.post(`/creat-room`, {
                 'userId': currentUserId,
                 'roomName': roomName,
                 'roomType': roomType,
                 'roomImgIcon': image,
-                'roomMembersIds': data
+                // 'roomMembersIds': data
             });
+            console.log(response)
             setRoomList(response.data.room_list)
 
-            modalCloseBtn.current.click()
+            // modalCloseBtn.current.click()
             setShowChatComp(2)
         }
         catch (err) {
@@ -155,299 +156,260 @@ function RoomChat() {
     if (showChatComp == 1) {
         return (
             <>
-                {/* <section className="chat_main_section">
-                    <div className="container-fluid">
-                        <div className="container">
-                            <div className="main_form">
-                                <div className="row form_row">
-                                    <div className="col-lg-12 fom_data "> */}
-                                        <div className="chat_container position-relative">
-                                            <div className="chat_person_head d-flex justify-content-between align-items-center pop_up_search ">
+                <div className="chat_container position-relative">
+                    <div className="chat_person_head d-flex justify-content-between align-items-center pop_up_search ">
 
-                                                <div className='row w-100'>
-                                                    <div className='col-md-8'>
-                                                        <div className='room_inside_input_box'>
-                                                            <label>Search room: </label>
-                                                            <Input type={Text} name={'searchRoom'} placeholder={'Enter room name'} setFieldValue={setRoomName}
-                                                                paramToKnowComp={2} />
-                                                        </div>
-                                                    </div>
-                                                    <div className='col-md-4'>
-                                                        <div className='btn_box_room'>
-                                                            <button className='find_room float-right' onClick={() => setShowRoomCreatInput(true)}>
-                                                                Creat room: +
-                                                            </button>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            {/* <h1>{showRoomCreatInput}</h1> */}
-
-                                            {showRoomCreatInput == false ?
-                                                <>
-                                                    {showSpinner ?
-                                                        <>
-                                                            <div className="d-flex justify-content-center">
-                                                                <div className="spinner-border" role="status">
-                                                                    <span className="visually-hidden">Loading...</span>
-                                                                </div>
-                                                            </div>
-
-                                                        </>
-                                                        :
-                                                        <div className="chat_person_head  ">
-                                                            {roomList?.length == 0 ?
-                                                                <> <div className='d-flex justify-content-center'><h4>No room exist, Please creat room for group chat</h4></div> </>
-                                                                :
-
-                                                                <div className="room-list">
-                                                                    {roomList && roomList.map((room) => (
-                                                                        <div
-                                                                            key={room.room_id}
-                                                                            className="room-card d-flex align-items-center p-2 mb-2 rounded shadow-sm"
-                                                                            style={{
-                                                                                cursor: "pointer",
-                                                                                transition: "all 0.2s ease-in-out",
-                                                                                background: "#fff",
-                                                                                border: "1px solid #e0e0e0",
-                                                                            }}
-                                                                            onClick={() => getAllChatOnRoomId(room)}
-                                                                        >
-                                                                            {/* Room Image */}
-                                                                            <div
-                                                                                className="room-avatar me-3"
-                                                                                style={{
-                                                                                    width: "50px",
-                                                                                    height: "50px",
-                                                                                    borderRadius: "12px",
-                                                                                    overflow: "hidden",
-                                                                                    flexShrink: 0,
-                                                                                    background: "#f1f1f1",
-                                                                                }}
-                                                                            >
-                                                                                <img
-                                                                                    src={room.image}
-                                                                                    alt={room.room_name}
-                                                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                                                                />
-                                                                            </div>
-
-                                                                            {/* Room Info */}
-                                                                            <div className="d-flex flex-column">
-                                                                                <h6 className="mb-1 fw-bold text-dark" style={{ fontSize: "16px" }}>
-                                                                                    {room.room_name}
-                                                                                </h6>
-                                                                                <small className="text-muted">Click to join chat</small>
-                                                                            </div>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            }
-                                                        </div>
-
-                                                    }
-                                                </>
-
-
-                                                :
-
-                                                (<div className="chat_body ">
-                                                    {showRoomCreatInput ?
-
-
-                                                        <div className='main auth_form' style={{ display: 'block', justifyContent: 'center', marginLeft: 'auto', marginTop: '40px' }}>
-                                                            <div className='room_input_box'>
-                                                                <label style={{ marginLeft: '16px' }}>Enter room name : </label>
-                                                                <Input classname={'input_text'} type={Text} name={'roomchat'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
-                                                            </div>
-
-                                                            <div className='room_input_box' style={{ marginTop: '10px' }}>
-                                                                <label>Room profile image : </label>
-                                                                <input type="file" name="profilePicture" onChange={(event) => {
-                                                                    setSelecetedRoomImage(event.currentTarget.files[0]);
-                                                                }} className="password" />
-                                                            </div>
-                                                            <div className='room_input_box' style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
-                                                                <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
-                                                                <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
-                                                            </div>
-                                                            <div style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
-                                                                <button className='find_room ' onClick={getUserList} disabled={roomName === ''}>Add Member</button>
-                                                                {/* <button onClick={getRoomName} disabled={roomName === ''}>Add Member</button> */}
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <div className='no_data' style={{ display: 'flex', justifyContent: 'center' }} >
-                                                            <h2>No room exisst</h2>
-                                                        </div>
-                                                    }
-                                                </div>)
-                                            }
-
-                                        </div>
-                                    {/* </div>
+                        <div className='row w-100'>
+                            <div className='col-md-8'>
+                                <div className='room_inside_input_box'>
+                                    <label>Search room: </label>
+                                    <Input type={Text} name={'searchRoom'} placeholder={'Enter room name'} setFieldValue={setRoomName}
+                                        paramToKnowComp={2} />
                                 </div>
                             </div>
+                            <div className='col-md-4'>
+                                <div className='btn_box_room'>
+                                    <button className='find_room float-right' title='Create Room' onClick={() => setShowRoomCreatInput(true)}>
+                                         +
+                                    </button>
+                                </div>
+
+
+                            </div>
                         </div>
+
+
                     </div>
-                </section> */}
-                <PopUp listOfUsersToShow={listOfUsers} inputRef={inputRef} fetchUserList={getRoomName} getAllUser={getUserList} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} />
+                    {/* <h1>{showRoomCreatInput}</h1> */}
+
+                    {showRoomCreatInput == false ?
+                        <>
+                            {showSpinner ?
+                                <>
+                                    <div className="d-flex justify-content-center">
+                                        <div className="spinner-border" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+
+                                </>
+                                :
+                                <div className="chat_person_head  ">
+                                    {roomList?.length == 0 ?
+                                        <> <div className='d-flex justify-content-center'><h4>No room exist, Please creat room for group chat</h4></div> </>
+                                        :
+
+                                        <div className="room-list">
+                                            {roomList && roomList.map((room) => (
+                                                <div
+                                                    key={room.room_id}
+                                                    className="room-card d-flex align-items-center p-2 mb-2 rounded shadow-sm"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        transition: "all 0.2s ease-in-out",
+                                                        background: "#fff",
+                                                        border: "1px solid #e0e0e0",
+                                                    }}
+                                                    onClick={() => getAllChatOnRoomId(room)}
+                                                >
+                                                    {/* Room Image */}
+                                                    <div
+                                                        className="room-avatar me-3"
+                                                        style={{
+                                                            width: "50px",
+                                                            height: "50px",
+                                                            borderRadius: "12px",
+                                                            overflow: "hidden",
+                                                            flexShrink: 0,
+                                                            background: "#f1f1f1",
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={room.image}
+                                                            alt={room.room_name}
+                                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                        />
+                                                    </div>
+
+                                                    {/* Room Info */}
+                                                    <div className="d-flex flex-column">
+                                                        <h6 className="mb-1 fw-bold text-dark" style={{ fontSize: "16px" }}>
+                                                            {room.room_name}
+                                                        </h6>
+                                                        <small className="text-muted">Click to join chat</small>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    }
+                                </div>
+
+                            }
+                        </>
+
+
+                        :
+
+                        (<div className="chat_body ">
+                            {showRoomCreatInput ?
+
+
+                                <div className='main auth_form' style={{ display: 'block', justifyContent: 'center', marginLeft: 'auto', marginTop: '40px' }}>
+                                    <div className='room_input_box'>
+                                        <label style={{ marginLeft: '16px' }}>Enter room name : </label>
+                                        <Input classname={'input_text'} type={Text} name={'roomchat'} placeholder={'Enter room name'} setFieldValue={setRoomName} paramToKnowComp={2} />
+                                    </div>
+
+                                    <div className='room_input_box' style={{ marginTop: '10px' }}>
+                                        <label>Room profile image : </label>
+                                        <input type="file" name="profilePicture" onChange={(event) => {
+                                            setSelecetedRoomImage(event.currentTarget.files[0]);
+                                        }} className="password" />
+                                    </div>
+                                    <div className='room_input_box' style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
+                                        <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
+                                        <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'center', width: '300px', marginTop: '10px' }}>
+                                        <button className='find_room ' onClick={createRoom} disabled={roomName === ''}>Create Room</button>
+                                        {/* <button onClick={getRoomName} disabled={roomName === ''}>Add Member</button> */}
+                                    </div>
+                                </div>
+                                :
+                                <div className='no_data' style={{ display: 'flex', justifyContent: 'center' }} >
+                                    <h2>No room exisst</h2>
+                                </div>
+                            }
+                        </div>)
+                    }
+
+                </div>
+
+                {/* <PopUp listOfUsersToShow={listOfUsers} inputRef={inputRef}  getAllUser={getUserList} refOpenModal={modalOpenBtn} refCloseModal={modalCloseBtn} /> */}
             </>
         )
     } else if (showChatComp == 2) {
 
 
         return (
-            // <section className="chat_main_section">
-            //     <div className="container-fluid">
-            //         <div className="container">
 
-            //             <div className="main_form">
-            //                 <div className="row form_row">
+            <div className="chat_container position-relative">
 
-
-            //                     <div className="col-lg-12 fom_data ">
-
-                                    <div className="chat_container position-relative">
-
-                                        <div className="chat_person_head d-flex justify-content-between align-items-center">
-                                            <div className="person_status_box d-flex justify-content-start align-items-center">
-                                                <div onClick={openGroupInfo} className="image_box">
-                                                    <img src={currentOpenedRoomDetails?.image} alt="" />
-                                                </div>
-                                                <div onClick={openGroupInfo} className="person_status">
-                                                    <h4 className="m-o person_name_head">
-                                                        {currentOpenedRoomDetails?.room_name}
-                                                    </h4>
-                                                </div>
-                                            </div>
+                <div className="chat_person_head d-flex justify-content-between align-items-center">
+                    <div className="person_status_box d-flex justify-content-start align-items-center">
+                        <div onClick={openGroupInfo} className="image_box">
+                            <img src={currentOpenedRoomDetails?.image} alt="" />
+                        </div>
+                        <div onClick={openGroupInfo} className="person_status">
+                            <h4 className="m-o person_name_head">
+                                {currentOpenedRoomDetails?.room_name}
+                            </h4>
+                        </div>
+                    </div>
 
 
-                                            <div className="dropdown setting_drop three_dot seeting_btn_desktop">
-                                                <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                                    {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
-                                                </a>
+                    <div className="dropdown setting_drop three_dot seeting_btn_desktop">
+                        <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i className="fa-solid fa-ellipsis-vertical"></i>
+                            {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
+                        </a>
 
-                                                <ul className="dropdown-menu">
-                                                    <li>
-                                                        <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
-                                                            Delete Room </a>
-                                                    </li>
-                                                    <li>
-                                                        <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#delete_chat">
-                                                            <img src="assets/images/delete.svg" alt="" />
-                                                            Clear all Chat</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                        <ul className="dropdown-menu">
+                            <li>
+                                <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                                    data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
+                                    Delete Room </a>
+                            </li>
+                            <li>
+                                <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
+                                    data-bs-target="#delete_chat">
+                                    <img src="assets/images/delete.svg" alt="" />
+                                    Clear all Chat</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-                                        {/* <Chat appendUserId={(e) => setShowUserChat(e)} ></Chat> */}
-                                        <Chat conversationDocRef={conversationDocRef} conversationId={conversationId} ref={ChatComponent} appendUserId={(e) => setShowUserChat(e)} ></Chat>
+                {/* <Chat appendUserId={(e) => setShowUserChat(e)} ></Chat> */}
+                <Chat conversationDocRef={conversationDocRef} conversationId={conversationId} ref={ChatComponent} appendUserId={(e) => setShowUserChat(e)} ></Chat>
 
-                                    </div>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </section>
+            </div>
+
         );
     } else if (showChatComp == 3) {
         return (
-            // <section className="chat_main_section">
-            //     <div className="container-fluid">
-            //         <div className="container">
 
-            //             <div className="main_form">
-            //                 <div className="row form_row">
+            <div className="chat_container position-relative">
+                <div>
 
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
 
-            //                     <div className="col-lg-12 fom_data ">
+                        <div className="person_status">
+                            <img style={{ height: '25px' }} src={myImage} alt="" />
 
-                                    <div className="chat_container position-relative">
-                                        <div>
-
-                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-
-                                                <div className="person_status">
-                                                    <img style={{ height: '25px' }} src={myImage} alt="" />
-
-                                                    <h2 style={{ fontWeight: '700', marginLeft: '15px', marginTop: '7px' }} className="m-o person_name_head">
-                                                        Room Info
-                                                    </h2>
-                                                    <br />
+                            <h2 style={{ fontWeight: '700', marginLeft: '15px', marginTop: '7px' }} className="m-o person_name_head">
+                                Room Info
+                            </h2>
+                            <br />
 
 
-                                                </div>
-                                                <div className="dropdown setting_drop three_dot seeting_btn_desktop">
-                                                    <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        <i className="fa-solid fa-ellipsis-vertical" style={{ marginTop: '10px' }}></i>
-                                                        {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
-                                                    </a>
+                        </div>
+                        <div className="dropdown setting_drop three_dot seeting_btn_desktop">
+                            <a className="btn" href="javascript:void(0)" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i className="fa-solid fa-ellipsis-vertical" style={{ marginTop: '10px' }}></i>
+                                {/* <img className="threeDOt" src="assets/images/3dot.svg" alt="" /> */}
+                            </a>
 
-                                                    <ul className="dropdown-menu">
-                                                        <li>
-                                                            <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
-                                                                Clear all chat</a>
-                                                        </li>
-                                                        <li>
-                                                            <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
-                                                                data-bs-target="#delete_chat">
-                                                                <img src="assets/images/delete.svg" alt="" />
-                                                                Delete room</a>
-                                                        </li>
+                            <ul className="dropdown-menu">
+                                <li>
+                                    <a className="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#chat_support"><img src="assets/images/customer-contact.svg" alt="" />
+                                        Clear all chat</a>
+                                </li>
+                                <li>
+                                    <a className="dropdown-item delete_item" href="javascript;void(0)" data-bs-toggle="modal"
+                                        data-bs-target="#delete_chat">
+                                        <img src="assets/images/delete.svg" alt="" />
+                                        Delete room</a>
+                                </li>
 
-                                                    </ul>
-                                                </div>
-                                            </div>
+                            </ul>
+                        </div>
+                    </div>
 
-                                            <div>
-                                                <div>
-                                                    <div className="image_box" style={{ display: 'flex', justifyContent: 'center' }}>
-                                                        <img style={{ height: '100px', width: '100px' }} src={myImage} alt="" />
-                                                    </div>
-                                                </div>
-                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <h2>Room Name</h2>
-                                                </div>
-                                                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
-                                                        <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
-                                                        <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div className="dropdown">
-                                                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            Dropdown button
-                                                        </button>
-                                                        <ul className="dropdown-menu">
-                                                            <li><a className="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
-                                                            <li><a className="dropdown-item">Another action</a></li>
-                                                            <li><a className="dropdown-item">Something else here</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </section>
+                    <div>
+                        <div>
+                            <div className="image_box" style={{ display: 'flex', justifyContent: 'center' }}>
+                                <img style={{ height: '100px', width: '100px' }} src={myImage} alt="" />
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <h2>Room Name</h2>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '300px' }}>
+                                <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(1)} paramToKnowComp={3} />Private</label>
+                                <label style={{ cursor: 'pointer' }}><Input type={'radio'} name={'check'} setFieldValue={(e) => setRoomType(2)} paramToKnowComp={3} />Public</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="dropdown">
+                                <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Dropdown button
+                                </button>
+                                <ul className="dropdown-menu">
+                                    <li><a className="dropdown-item"><button onClick={() => console.log('worrking')}> ok</button></a></li>
+                                    <li><a className="dropdown-item">Another action</a></li>
+                                    <li><a className="dropdown-item">Something else here</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         );
 
     }

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 // import throttle from "lodash.throttle";
 import { useCallback } from "react";
 import lodash from "lodash";
+import { useSnackbar } from "notistack";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email format").required("Email is required"),
@@ -23,42 +24,7 @@ const validationSchema = Yup.object().shape({
 function SignUp() {
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false)
-
-    /**
-     * Formik form handling and validation
-     */
-    // const formik = useFormik({
-    //     initialValues: { email: "", password: "", confirmPassword: "", profilePicture: '' },
-    //     validationSchema: validationSchema,
-    //     onSubmit: async (values) => {
-    //         const image = await addImageInS3Bucket(values.profilePicture)
-    //         console.log(image)
-    //         try {
-    //             setShowSpinner(true)
-    //             const response = await apiService.post("/sign-up", {
-    //                 password: values.password,
-    //                 email: values.email,
-    //                 profileImage: image
-    //             });
-    //             console.log(response)
-
-    //             if (response.data.code == 200) {
-    //                 setShowSpinner(false)
-    //                 alert(response.data.message)
-    //                 updateCompValue(1)
-    //                 navigate("/log-in");
-    //             }else{
-    //                 alert(response.data.message)
-    //                 setShowSpinner(false)
-
-    //             }
-    //         } catch (error) {
-    //             console.log("Error uploading file:", error);
-    //         }
-
-
-    //     }
-    // });
+    const { enqueueSnackbar } = useSnackbar();
 
     const formik = useFormik({
         initialValues: { email: "", password: "", confirmPassword: "", profilePicture: "" },
@@ -83,11 +49,15 @@ function SignUp() {
 
                     if (response.data.code === 200) {
                         setShowSpinner(false);
-                        alert(response.data.message);
+                        // alert(response.data.message);
+                        enqueueSnackbar(response.data.message, { variant: "success" });
+
                         // updateCompValue(1);
                         navigate("/log-in");
                     } else {
-                        alert(response.data.message);
+                        // alert(response.data.message);
+                        enqueueSnackbar(response.data.message, { variant: "warning" });
+
                         setShowSpinner(false);
                     }
                 } catch (error) {

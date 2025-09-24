@@ -11,6 +11,8 @@ import { useFormik } from "formik";
 import Chat from '../chat/chat';
 import PopUp from '../popUp';
 import '../newChat.css';
+import { useSnackbar } from "notistack";
+
 // import circular
 export default function SinglePersonChat() {
     const modalOpenBtn = useRef();
@@ -26,6 +28,7 @@ export default function SinglePersonChat() {
     const [usersList, setUsersList] = useState([])
     const [showUserChat, setShowUserChat] = useState(1)
     const [currentChatUserData, setCurrentChatUserData] = useState()
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         const checkInitialLogin = localStorage.getItem('initial_login')
@@ -111,6 +114,7 @@ export default function SinglePersonChat() {
             arrayOfAddedUsersId: newItems
         });
         if (response.data?.code == 200) {
+            enqueueSnackbar(response.data.message, { variant: "success" });
             modalCloseBtn.current.click()
             localStorage.setItem('initial_login', 2)
         }
@@ -140,78 +144,78 @@ export default function SinglePersonChat() {
                         <div className="container">
                             <div className="main_form">
                                 <div className="row form_row"> */}
-                                    <div className="col-lg-12 fom_data">
-                                        <div className="chat_container bg-white rounded shadow-sm p-3 position-relative">
+                <div className="col-lg-12 fom_data">
+                    <div className="chat_container bg-white rounded shadow-sm p-3 position-relative">
 
-                                            {/* Header */}
-                                            <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                                                <h2 className="fw-bold text-primary mb-0">Chats</h2>
-                                                <button
-                                                    onClick={() => modalOpenBtn.current.click()}
-                                                    className="btn btn-sm btn-primary rounded-pill px-3"
-                                                >
-                                                    + Add Friend
-                                                </button>
-                                            </div>
-                                            {/* <CircularProgress color="inherit" /> */}
+                        {/* Header */}
+                        <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h2 className="fw-bold text-primary mb-0">Chats</h2>
+                            <button
+                                onClick={() => modalOpenBtn.current.click()}
+                                className="btn btn-sm btn-primary rounded-pill px-3"
+                            >
+                                + Add Friend
+                            </button>
+                        </div>
+                        {/* <CircularProgress color="inherit" /> */}
 
-                                            {/* Chat List */}
-                                            {usersList.length > 0 ? (
-                                                <div className="chat-list" style={{ maxHeight: "65vh", overflowY: "auto" }}>
-                                                    {usersList.map((user) => (
-                                                        <div
-                                                            onClick={() => showChat(user)}
-                                                            key={user._id}
-                                                            className="user-card d-flex align-items-center p-2 mb-2 rounded"
-                                                            style={{
-                                                                cursor: "pointer",
-                                                                transition: "all 0.2s ease-in-out",
-                                                                background: "#fff",
-                                                                border: "1px solid #e0e0e0",
-                                                            }}
-                                                        >
-                                                            {/* Avatar */}
-                                                            <div
-                                                                className="user-avatar me-3"
-                                                                style={{
-                                                                    width: "45px",
-                                                                    height: "45px",
-                                                                    borderRadius: "50%",
-                                                                    overflow: "hidden",
-                                                                    border: "2px solid #007bff",
-                                                                    flexShrink: 0,
-                                                                }}
-                                                            >
-                                                                <img
-                                                                    src={user.profile_img}
-                                                                    alt={user.email}
-                                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                                                />
-                                                            </div>
+                        {/* Chat List */}
+                        {usersList.length > 0 ? (
+                            <div className="chat-list" style={{ maxHeight: "65vh", overflowY: "auto" }}>
+                                {usersList.map((user) => (
+                                    <div
+                                        onClick={() => showChat(user)}
+                                        key={user._id}
+                                        className="user-card d-flex align-items-center p-2 mb-2 rounded"
+                                        style={{
+                                            cursor: "pointer",
+                                            transition: "all 0.2s ease-in-out",
+                                            background: "#fff",
+                                            border: "1px solid #e0e0e0",
+                                        }}
+                                    >
+                                        {/* Avatar */}
+                                        <div
+                                            className="user-avatar me-3"
+                                            style={{
+                                                width: "45px",
+                                                height: "45px",
+                                                borderRadius: "50%",
+                                                overflow: "hidden",
+                                                border: "2px solid #007bff",
+                                                flexShrink: 0,
+                                            }}
+                                        >
+                                            <img
+                                                src={user.profile_img}
+                                                alt={user.email}
+                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                            />
+                                        </div>
 
-                                                            {/* User Info */}
-                                                            <div className="d-flex flex-column">
-                                                                <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: "15px" }}>
-                                                                    {user.email.split("@")[0]}
-                                                                </h6>
-                                                                <small className="text-muted">Click to chat</small>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <div className="text-center mt-4">
-                                                    <p className="fw-bold text-secondary">No chats available</p>
-                                                    <div className="alert alert-info small mt-2 text-start">
-                                                        <span className="fw-bold">💡 Tip:</span> First add a friend from <b>World Chat</b>,
-                                                        or click <b>Add Friend</b> to search and connect with users.
-                                                    </div>
-                                                </div>
-                                            )}
-
+                                        {/* User Info */}
+                                        <div className="d-flex flex-column">
+                                            <h6 className="mb-0 fw-bold text-dark" style={{ fontSize: "15px" }}>
+                                                {user.email.split("@")[0]}
+                                            </h6>
+                                            <small className="text-muted">Click to chat</small>
                                         </div>
                                     </div>
-                                {/* </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center mt-4">
+                                <p className="fw-bold text-secondary">No chats available</p>
+                                <div className="alert alert-info small mt-2 text-start">
+                                    <span className="fw-bold">💡 Tip:</span> First add a friend from <b>World Chat</b>,
+                                    or click <b>Add Friend</b> to search and connect with users.
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+                {/* </div>
                             </div>
                         </div>
                     </div>
@@ -369,7 +373,7 @@ export default function SinglePersonChat() {
 //     };
 
 //     /**
-//      * 
+//      *
 //      * @returns split user name from email
 //      */
 //     const getUserName = () => {
@@ -391,8 +395,8 @@ export default function SinglePersonChat() {
 //     }
 
 //     /**
-//      * 
-//      * @param {*} data 
+//      *
+//      * @param {*} data
 //      */
 //     const showChat = (data) => {
 //         // console.log(data)
@@ -403,8 +407,8 @@ export default function SinglePersonChat() {
 //     }
 
 //     /**
-//      * 
-//      * @param {*} newItems get selected friend list 
+//      *
+//      * @param {*} newItems get selected friend list
 //      */
 //     const updateItems = async (newItems) => {
 //         console.log(newItems)
@@ -429,7 +433,7 @@ export default function SinglePersonChat() {
 
 
 //     /**
-//      * 
+//      *
 //      */
 //     const goBack = () => {
 //         setShowUserChat(1)
@@ -437,8 +441,8 @@ export default function SinglePersonChat() {
 //     }
 
 //     /**
-//  * 
-//  * @param {*} value get input text to search user 
+//  *
+//  * @param {*} value get input text to search user
 //  */
 //     const searchUser = async (value) => {
 //         console.log("Received from child:", value);
