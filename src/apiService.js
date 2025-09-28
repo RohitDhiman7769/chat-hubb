@@ -5,21 +5,20 @@ const API_BASE_URL ='https://chat-backend-mw6l.onrender.com/api/users/'
 // Create an Axios instance for default settings
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  withCredentials: true 
 });
 
-apiClient.interceptors.request.use(
-  (config) => {
-    
-    const token = localStorage.getItem("token"); 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.response.use(
+  res => res,
+  async (error) => {
+    if (error.response.status === 401) {
+      const res = await axios.get("/refresh", { withCredentials: true });
+      localStorage.setItem("accessToken", res.data.accessToken);
+      error.config.headers["Authorization"] = `Bearer ${res.data.accessToken}`;
+      return axios(error.config);
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
+    return Promise.reject(error);
+  }
 );
 
 // Common API methods

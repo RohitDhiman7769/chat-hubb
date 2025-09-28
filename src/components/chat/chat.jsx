@@ -38,7 +38,7 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, par
    * fetch data from firebase
    */
   const fetchChatFromFireBase = () => {
-    // console.log(conversationDocRef, conversationId)
+    console.log(conversationDocRef, conversationId)
     const messagesCollectionRef = collection(conversationDocRef, conversationId);
     const q = query(messagesCollectionRef, orderBy("createdAt", "asc"));
 
@@ -172,14 +172,22 @@ const Chat = forwardRef(({ appendUserId, conversationId, conversationDocRef, par
 
     try {
       await runTransaction(db, async (tx) => {
+        console.log('db', db)
+        console.log('emoji', emoji)
+        console.log('tx', tx)
+        console.log('msgRef', msgRef)
         const snap = await tx.get(msgRef);
+        console.log('snap', snap)
         if (!snap.exists()) return;
         const data = snap.data();
+        console.log('data', data)
         const reactions = data.reactions || {};
+        console.log('reactions', reactions)
         const newReactions = JSON.parse(JSON.stringify(reactions));
-
+        console.log('newReactions', newReactions)
         if (!newReactions[emoji]) newReactions[emoji] = { count: 0, users: {} };
         const users = newReactions[emoji].users || {};
+        console.log('users', users)
 
         if (users[uid]) {
           // remove reaction

@@ -50,7 +50,11 @@ const PrivateLayout = ({ children }) => {
 
                   <Header />
                   <div className="children-wrapper">
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<div className="d-flex justify-content-center">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    </div>}>
                       {children}
                     </Suspense>
                   </div>
@@ -92,7 +96,11 @@ const PublicLayout = ({ children }) => {
   return (
     <div className="auth-main">
       <Header />  {/* Add Header here */}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div className="d-flex justify-content-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>}>
         {children}
       </Suspense>
     </div>
@@ -117,26 +125,26 @@ function App() {
     <Provider store={appStore}>
       <AuthContext.Provider value={contextValue}>
         {/* <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'start', horizontal: 'top' }}> */}
-<SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-        <BrowserRouter>
-          <Routes>
-            {/* Private routes */}
-            <Route path="/" element={isLoggedIn ? <PrivateLayout><SinglePersonChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
-            <Route path="/home" element={isLoggedIn ? <PrivateLayout><SinglePersonChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
-            <Route path="/room" element={isLoggedIn ? <PrivateLayout><RoomChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
-            <Route path="/world-chat" element={isLoggedIn ? <PrivateLayout><WorldChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
-            <Route path="/wall" element={isLoggedIn ? <PrivateLayout><Wall /></PrivateLayout> : <Navigate to="/log-in" replace />} />
-            <Route path="/profile" element={isLoggedIn ? <PrivateLayout><Profile /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+        <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+          <BrowserRouter>
+            <Routes>
+              {/* Private routes */}
+              <Route path="/" element={isLoggedIn ? <PrivateLayout><SinglePersonChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+              <Route path="/home" element={isLoggedIn ? <PrivateLayout><SinglePersonChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+              <Route path="/room" element={isLoggedIn ? <PrivateLayout><RoomChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+              <Route path="/world-chat" element={isLoggedIn ? <PrivateLayout><WorldChat /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+              <Route path="/wall" element={isLoggedIn ? <PrivateLayout><Wall /></PrivateLayout> : <Navigate to="/log-in" replace />} />
+              <Route path="/profile" element={isLoggedIn ? <PrivateLayout><Profile /></PrivateLayout> : <Navigate to="/log-in" replace />} />
 
-            {/* Public routes */}
-            <Route path="/log-in" element={<PublicLayout><Login /></PublicLayout>} />
-            <Route path="/sign-up" element={<PublicLayout><SignUp /></PublicLayout>} />
-            <Route path="/forget-password" element={<PublicLayout><ForgetPassword /></PublicLayout>} />
+              {/* Public routes */}
+              <Route path="/log-in" element={<PublicLayout><Login /></PublicLayout>} />
+              <Route path="/sign-up" element={<PublicLayout><SignUp /></PublicLayout>} />
+              <Route path="/forget-password" element={<PublicLayout><ForgetPassword /></PublicLayout>} />
 
-            {/* Catch-all route */}
-            <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/log-in"} replace />} />
-          </Routes>
-        </BrowserRouter>
+              {/* Catch-all route */}
+              <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/log-in"} replace />} />
+            </Routes>
+          </BrowserRouter>
         </SnackbarProvider>
       </AuthContext.Provider>
     </Provider>
